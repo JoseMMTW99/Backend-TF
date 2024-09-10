@@ -1,0 +1,9 @@
+# Ignorar node_modules
+node_modules/
+
+# Ignorar kubeuser.yaml
+kubeuser.yaml
+
+src/.env
+src/.env.development
+src/.env.production
