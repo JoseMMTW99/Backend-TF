@@ -1,0 +1,1 @@
+console.log("Soy el script de 'home.js'");

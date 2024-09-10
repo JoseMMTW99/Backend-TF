@@ -1,0 +1,33 @@
+<main class="container">
+    <a href="/api/sessions/logout" class="btn btn-outline-danger w-25">Logout</a>
+    <div class="text-center">
+        <h1>Sección Usuarios</h1>
+        {{#each users}}
+            <p>Nombre: {{ this.first_name}} {{this.last_name}}. Correo: {{this.email}}</p>
+            <hr>
+        {{/each}}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {{#if hasPrevPage}}
+                    <li class="page-item">
+                        <a class="page-link" href="/api/users?numPage={{prevPage}}" aria-label="Anterior">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Anterior</span>
+                        </a>
+                    </li>
+                {{/if}}
+                <li class="page-item disabled">
+                    <span class="page-link">{{page}}</span>
+                </li>
+                {{#if hasNextPage}}
+                    <li class="page-item">
+                        <a class="page-link" href="/api/users?numPage={{nextPage}}" aria-label="Siguiente">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Siguiente</span>
+                        </a>
+                    </li>
+                {{/if}}
+            </ul>
+        </nav>
+    </div>
+<main/>

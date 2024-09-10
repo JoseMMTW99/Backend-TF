@@ -1,0 +1,21 @@
+<main>
+    <h1>Home</h1>
+    {{!-- El {{#if}} necesita un valor booleano para poder ser usado (por eso pongo "role: user.role === 'admin'", para que me devuelva true or false) --}}
+    {{#if role}}
+        <h3>Usuario: {{ username }}. Bienvenido, {{ nombre }} {{ apellido }}. Usted es admin, puede ver los productos</h3>
+        <br>
+        {{#each products}}
+            <div>
+                <h3>Producto N°{{this.id}}: {{this.nombre}}</h3>
+                <ul>
+                    <li>Precio del producto: {{this.precio}}</li>
+                </ul>
+                <br>
+            </div>
+        {{/each}}
+    {{else}}
+        <h3>Usuario: {{ username }}. Bienvenido, {{ nombre }} {{ apellido }}. Usted es no admin, no puede ver los productos</h3><br>
+    {{/if}}
+</main>
+
+<script src="/js/home.js"></script>

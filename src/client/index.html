@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Usuarios</h1>
+    <div id="users-container"></div>
+    <script>
+        const url = 'http://localhost:8000/api/users';
+        const getFetch = async (url) => {
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "text/html"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('La respuesta de la red no fue satisfactoria');
+                }
+
+                const text = await response.text();
+                document.getElementById('users-container').innerHTML = text;
+            } catch (error) {
+                console.error('Error en la solicitud fetch:', error);
+            }
+        }
+        getFetch(url);
+    </script>
+</body>
+</html>

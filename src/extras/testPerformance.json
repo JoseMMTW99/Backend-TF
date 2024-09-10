@@ -1,0 +1,87 @@
+{
+  "aggregate": {
+    "counters": {
+      "vusers.created_by_name.Sessions Flow (Register y login)": 200,
+      "vusers.created": 200,
+      "http.requests": 200,
+      "plugins.metrics-by-endpoint./pruebas/test/user.errors.ECONNREFUSED": 200,
+      "errors.ECONNREFUSED": 200,
+      "vusers.failed": 200
+    },
+    "rates": {
+      "http.request_rate": 10
+    },
+    "firstCounterAt": 1722907829222,
+    "lastCounterAt": 1722907849031,
+    "firstMetricAt": 1722907829222,
+    "lastMetricAt": 1722907849031,
+    "period": 1722907840000,
+    "summaries": {},
+    "histograms": {}
+  },
+  "intermediate": [
+    {
+      "counters": {
+        "vusers.created_by_name.Sessions Flow (Register y login)": 9,
+        "vusers.created": 9,
+        "http.requests": 9,
+        "plugins.metrics-by-endpoint./pruebas/test/user.errors.ECONNREFUSED": 9,
+        "errors.ECONNREFUSED": 9,
+        "vusers.failed": 9
+      },
+      "rates": {
+        "http.request_rate": 9
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1722907829222,
+      "lastCounterAt": 1722907829988,
+      "firstMetricAt": 1722907829222,
+      "lastMetricAt": 1722907829988,
+      "period": "1722907820000",
+      "summaries": {},
+      "histograms": {}
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.Sessions Flow (Register y login)": 100,
+        "vusers.created": 100,
+        "http.requests": 100,
+        "plugins.metrics-by-endpoint./pruebas/test/user.errors.ECONNREFUSED": 100,
+        "errors.ECONNREFUSED": 100,
+        "vusers.failed": 100
+      },
+      "rates": {
+        "http.request_rate": 10
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1722907830030,
+      "lastCounterAt": 1722907839980,
+      "firstMetricAt": 1722907830030,
+      "lastMetricAt": 1722907839980,
+      "period": "1722907830000",
+      "summaries": {},
+      "histograms": {}
+    },
+    {
+      "counters": {
+        "vusers.created_by_name.Sessions Flow (Register y login)": 91,
+        "vusers.created": 91,
+        "http.requests": 91,
+        "plugins.metrics-by-endpoint./pruebas/test/user.errors.ECONNREFUSED": 91,
+        "errors.ECONNREFUSED": 91,
+        "vusers.failed": 91
+      },
+      "rates": {
+        "http.request_rate": 10
+      },
+      "http.request_rate": null,
+      "firstCounterAt": 1722907840030,
+      "lastCounterAt": 1722907849031,
+      "firstMetricAt": 1722907840030,
+      "lastMetricAt": 1722907849031,
+      "period": "1722907840000",
+      "summaries": {},
+      "histograms": {}
+    }
+  ]
+}
