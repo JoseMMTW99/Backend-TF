@@ -39,8 +39,6 @@ const swaggerOptions = {
 const specs = swaggerJsDoc(swaggerOptions)
 app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -70,17 +68,6 @@ app.set('view engine', 'handlebars');
 
 app.use(routerApp);
 app.use(handleErrors())
-
-// Persistencia en base de datos (mongoDB)
-app.use(session({
-    store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URL,
-        ttl: 60 * 60 *1000 * 24 //Esto seria un día
-    }),
-    secret: 's3cr3tC0der',
-    resave: true,
-    saveUninitialized: true
-}));
 
 // Guardamos en una constante el servirdor (app.listen)
 const httpServer = app.listen(port, error => {

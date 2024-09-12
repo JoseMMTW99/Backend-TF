@@ -16,7 +16,7 @@ class UsersDaoMongo {
         }
     }
 
-    // Clase 19 (get dinámico)
+    // Get dinámico
     async getBy(filter) {
         try {
             return await this.model.findOne(filter); // Usar this.userModel para acceder al modelo de usuario

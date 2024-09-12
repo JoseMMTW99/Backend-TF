@@ -7,3 +7,7 @@ error: Alerta!!
 warning: Alerta!!
 fatal: Alerta!!
 error: Alerta!!
+error: Error: productsList is not defined en GET /
+error: Error: productsList is not defined en GET /
+error: Error: productsList is not defined en GET /
+error: Error: productsList is not defined en GET /

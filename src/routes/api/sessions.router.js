@@ -10,45 +10,6 @@ const authorization = require("../../utils/authorizationJWT");
 
 const router = Router();
 
-router.get("/logout", (req, res) => {
-  req.session.destroy((error) => {
-    if (error) res.send({ status: "error", error: error });
-    else return res.render("login");
-  });
-});
-
-// Ruta para iniciar sesión del administrador
-router.post("/loginAdmin", (req, res) => {
-  const { email, password } = req.body;
-  if (email !== "fede@gmail.com" || password !== 1234) {
-    return res.send("Login Failed");
-  }
-
-  req.session.user = {
-    email,
-    admin: true,
-  };
-
-  console.log(req.session.user);
-  res.send("Login Success");
-});
-
-// Ruta para cerrar sesión del administrador
-router.get("/logoutAdmin", (req, res) => {
-  req.session.destroy((error) => {
-    if (error) {
-      return res.send({ status: "error", error: error });
-    } else {
-      return res.send("Admin logged out successfully");
-    }
-  });
-});
-
-// Endpoint con autenticación de Administrador
-router.get("/adminData", auth, (req, res) => {
-  res.send("Datos Sensibles que solo puede ver el admin");
-});
-
 const UserRepository  = require('../../repositories/user.repository'); // Ajusta la ruta según sea necesario
 
 const userService = new UserRepository();
@@ -95,58 +56,85 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const { first_name, last_name, email, password } = req.body;
+    const { email, password } = req.body;
 
-    // Validar si vienen los datos
-    if (!email || !password)
-      return res
-        .status(401)
-        .send({ status: "error", error: "Ingrese todos los datos necesarios" });
+    // Validar si se proporcionan el correo electrónico y la contraseña
+    if (!email || !password) {
+      return res.status(401).send({
+        status: "error",
+        error: "Ingrese todos los datos necesarios"
+      });
+    }
 
+    // Buscar al usuario por correo electrónico
     const userFound = await userService.getUserBy({ email });
 
-    if (!userFound)
-      return res
-        .status(400)
-        .send({ status: "error", error: "Usuario no encontrado" });
+    // Validar si el usuario existe
+    if (!userFound) {
+      return res.status(400).send({
+        status: "error",
+        error: "Usuario no encontrado"
+      });
+    }
 
-    // Comparamos la contraseña ingresada hasheada con la de la base de datos
-    // Esto nos retorna "true" o "false"
-    if (!isValidPassword(password, { password: userFound.password }))
-      return res
-        .status(401)
-        .send({ status: "error", error: "Contraseña incorrecta" });
+    // Comparar la contraseña proporcionada con la almacenada (hasheada) en la base de datos
+    if (!isValidPassword(password, { password: userFound.password })) {
+      return res.status(401).send({
+        status: "error",
+        error: "Contraseña incorrecta"
+      });
+    }
 
-    // Establecer la sesión del usuario
+    // Establecer la sesión del usuario con toda la información necesaria
     req.session.user = {
+      id: userFound._id,
+      username: userFound.username,
+      nombre: userFound.first_name,
+      apellido: userFound.last_name,
       email: userFound.email,
-      admin: userFound.role === "admin", // Si es admin nos devuelve un "true", sino "false"
+      role: userFound.role,
+      admin: userFound.role === "admin" // Booleano para identificar si es admin
     };
 
-    console.log("Rol del usuario en sesión:", req.session.user.admin);
+    console.log("Usuario autenticado:", req.session.user);
 
-    // Datos que se guardan dentro del Token
+    // Generar un token JWT con la información del usuario
     const token = generateToken({
-      id:userFound._id,
-      email,
+      id: userFound._id,
+      email: userFound.email,
       role: userFound.role
-    })
+    });
 
-    // Guardamos en los cookies los datos del usuario
-    res
-      .cookie('coderCookieToken',  token, {
-        maxAge: 60*60*1000*24,  // Esto sería un día
-        httpOnly: true // Esto hace que solo se pueda ver el token desde una consulta http
-      })
-      .send({status: 'succes', token});
+    // Guardar el token en una cookie con opciones seguras
+    res.cookie('coderCookieToken', token, {
+      maxAge: 60 * 60 * 1000 * 24, // 1 día
+      httpOnly: true // Solo accesible por solicitudes HTTP
+    });
+
+    // Loguear el token en la consola
+    console.log("Token generado:", token);
+
+    // Redirigir al home después de un login exitoso
+    res.redirect('/');
+
   } catch (error) {
-    console.log(error);
+    console.error("Error en el proceso de login:", error);
+    res.status(500).send({ status: "error", error: "Error en el servidor" });
   }
 });
 
+router.get("/logout", (req, res) => {
+  req.session.destroy((error) => {
+    if (error) {
+      console.error('Error al destruir la sesión:', error);
+      return res.status(500).send({ status: "error", error: "Error al cerrar sesión" });
+    }
+    res.clearCookie('coderCookieToken'); // Borra la cookie del token
+    res.redirect('/login');
+  });
+});
 
 router.get('/github', passport.authenticate('github', {scope: 'user:email'}, async (req, resp) => {}))
-
 
 router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
   if (!req.user) {

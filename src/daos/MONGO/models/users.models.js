@@ -22,7 +22,8 @@ const UserSchema = new Schema({
     role: {
         type: String,
         default: 'user'
-    }
+    },
+    cart: []
 })
 
 UserSchema.plugin(mongoosePaginate)

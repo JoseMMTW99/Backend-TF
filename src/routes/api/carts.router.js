@@ -1,23 +1,16 @@
-const express = require ('express');
-const { Router } = require('express');
-const { CartsDaoMongo } = require('../../daos/MONGO/cartsDaoMongo');
+const express = require('express');
+const router = express.Router();
+const CartController = require('../../controllers/carts.controller');
 
-const router = Router();
+const cartController = new CartController();
 
-const cartService = new CartsDaoMongo()
+// Desestructuración de los métodos del controlador del carrito
+const { getAllCarts, addProductToCart, removeProductFromCart, deleteCart } = cartController;
 
-router.get('/', async (req, res) => {
-    const carts = await cartService.getCarts();
-    res.send(carts) 
-})
-router.post('/', async (req, res) => {
-    const carts = await cartService.createCart();
-    res.send(carts) 
-})
-router.post('/:id/products/:pid', async (req, res) => {
-    const {cid, pid} = req.params;
-    const result = await cartService.addProduct(cid, pid);
-    res.send(result)
-})
+// Definición de rutas del carrito
+router.get('/', getAllCarts); // Obtener todos los carritos con paginación
+router.post('/add', addProductToCart); // Agregar un producto al carrito de un usuario
+router.delete('/remove', removeProductFromCart); // Eliminar un producto del carrito de un usuario
+router.delete('/:userId', deleteCart); // Eliminar el carrito completo de un usuario
 
 module.exports = router;

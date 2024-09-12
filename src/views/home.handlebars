@@ -1,20 +1,26 @@
 <main>
-    <h1>Home</h1>
-    {{!-- El {{#if}} necesita un valor booleano para poder ser usado (por eso pongo "role: user.role === 'admin'", para que me devuelva true or false) --}}
-    {{#if role}}
-        <h3>Usuario: {{ username }}. Bienvenido, {{ nombre }} {{ apellido }}. Usted es admin, puede ver los productos</h3>
-        <br>
-        {{#each products}}
-            <div>
-                <h3>Producto N°{{this.id}}: {{this.nombre}}</h3>
-                <ul>
-                    <li>Precio del producto: {{this.precio}}</li>
-                </ul>
-                <br>
-            </div>
-        {{/each}}
+    <div class="d-flex justify-content-end">
+        {{!-- Verificar si hay un usuario autenticado --}}
+        {{#if username}}
+            <a href="/api/sessions/logout" class="btn btn-outline-danger w-25 ms-auto">Logout</a>
+        {{else}}
+            <a href="/login" class="btn btn-outline-primary w-25 ms-auto">Login</a>
+        {{/if}}
+    </div>
+
+    <h1 class="pt-3">Home</h1>
+
+    {{!-- Mostrar mensaje de bienvenida y detalles del usuario --}}
+    {{#if username}}
+        {{!-- Verificar si el rol del usuario es 'admin' --}}
+        {{#if role}}
+            <h3>Bienvenido, {{ nombre }} {{ apellido }}. Usted es admin</h3>
+            <br>
+        {{else}}
+            <h3>Bienvenido, {{ nombre }} {{ apellido }}.</h3><br>
+        {{/if}}
     {{else}}
-        <h3>Usuario: {{ username }}. Bienvenido, {{ nombre }} {{ apellido }}. Usted es no admin, no puede ver los productos</h3><br>
+        <h3>Bienvenido</h3>
     {{/if}}
 </main>
 

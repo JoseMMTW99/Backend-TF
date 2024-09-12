@@ -1,0 +1,58 @@
+<main class="container">
+    </div>
+    <div class="text-center">
+        <h1 class="pt-5">Sección Carritos</h1>
+        {{#if carts.length}}
+            {{#each carts}}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h3 class="card-title">Carrito de: {{ this.user.first_name }} {{ this.user.last_name }}</h3>
+                        <p class="card-text">Email: {{ this.user.email }}</p>
+                        <p class="card-text">Username: {{ this.user.username }}</p>
+                        <h4>Productos en el carrito:</h4>
+                        {{#if this.products.length}}
+                            {{#each this.products}}
+                                <div class="mb-2">
+                                    <p class="card-text">Producto: {{ this.title }}</p>
+                                    <p class="card-text">Descripción: {{ this.description }}</p>
+                                    <p class="card-text">Precio: {{ this.price }}</p>
+                                    <p class="card-text">Categoría: {{ this.category }}</p>
+                                    <p class="card-text">Cantidad: {{ this.quantity }}</p>
+                                    <p class="card-text">Subtotal: {{multiply this.price this.quantity}}</p>
+                                </div>
+                                <hr>
+                            {{/each}}
+                        {{else}}
+                            <p class="card-text">Carrito vacío</p>
+                        {{/if}}
+                    </div>
+                </div>
+            {{/each}}
+        {{else}}
+            <p>No hay carritos disponibles.</p>
+        {{/if}}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {{#if hasPrevPage}}
+                    <li class="page-item">
+                        <a class="page-link" href="/api/carts?numPage={{prevPage}}" aria-label="Anterior">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Anterior</span>
+                        </a>
+                    </li>
+                {{/if}}
+                <li class="page-item disabled">
+                    <span class="page-link">{{page}}</span>
+                </li>
+                {{#if hasNextPage}}
+                    <li class="page-item">
+                        <a class="page-link" href="/api/carts?numPage={{nextPage}}" aria-label="Siguiente">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Siguiente</span>
+                        </a>
+                    </li>
+                {{/if}}
+            </ul>
+        </nav>
+    </div>
+</main>

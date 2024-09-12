@@ -8,14 +8,17 @@ const router = Router();
 const userController = new UsersController();
 
 router.get('/', (req, res) => {
+    // Obtener los datos del usuario desde la sesión
+    const user = req.session.user;
+
     res.render('home', {
-        title: 'Mercadito || José',
-        username: user.username,
-        nombre: user.nombre,
-        apellido: user. apellido,
-        role: user.role === 'admin', // Pongo esto asi para que de True or False, porque en home.handlebars necesito como condicion un booleano, no se puede con un string como 'admin' hacer el {{#if}} porque no funciona.
-        products,
-        styles: "home.css"
+        title: 'TF Backend',
+        styles: "home.css",
+        // Pasar los datos del usuario al template
+        username: user ? user.username : null,
+        nombre: user ? user.nombre : null,
+        apellido: user ? user.apellido : null,
+        role: user ? user.role === 'admin' : false,
     });
 });
 
@@ -24,23 +27,8 @@ router.get('/chat', (req, res) => {
     res.render('chat', {styles: "chat.css"})
 })
 
-
 // Paginación
 router.get('/users', auth, userController.getUsers);
-
-const user = {
-    username: 'josemmtw99',
-    nombre: 'José',
-    apellido: 'Martínez Terán',
-    role: 'admin'
-}
-const products = [
-    { id: 1, nombre: "Laptop HP Pavilion", precio: 800 },
-    { id: 2, nombre: "Monitor ASUS 24 pulgadas", precio: 200 },
-    { id: 3, nombre: "Teclado mecánico Logitech G Pro", precio: 100 },
-    { id: 4, nombre: "Mouse inalámbrico Microsoft Surface", precio: 50 },
-    { id: 5, nombre: "Disco duro externo Seagate 1TB", precio: 60 }
-]
 
 // Login
 router.get('/login', (req, res) => {
