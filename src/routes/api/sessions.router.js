@@ -58,7 +58,6 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validar si se proporcionan el correo electrónico y la contraseña
     if (!email || !password) {
       return res.status(401).send({
         status: "error",
@@ -66,10 +65,8 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // Buscar al usuario por correo electrónico
     const userFound = await userService.getUserBy({ email });
 
-    // Validar si el usuario existe
     if (!userFound) {
       return res.status(400).send({
         status: "error",
@@ -77,7 +74,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // Comparar la contraseña proporcionada con la almacenada (hasheada) en la base de datos
     if (!isValidPassword(password, { password: userFound.password })) {
       return res.status(401).send({
         status: "error",
@@ -85,7 +81,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // Establecer la sesión del usuario con toda la información necesaria
     req.session.user = {
       id: userFound._id,
       username: userFound.username,
@@ -93,28 +88,25 @@ router.post("/login", async (req, res) => {
       apellido: userFound.last_name,
       email: userFound.email,
       role: userFound.role,
-      admin: userFound.role === "admin" // Booleano para identificar si es admin
+      admin: userFound.role === "admin"
     };
 
     console.log("Usuario autenticado:", req.session.user);
 
-    // Generar un token JWT con la información del usuario
     const token = generateToken({
       id: userFound._id,
       email: userFound.email,
       role: userFound.role
     });
 
-    // Guardar el token en una cookie con opciones seguras
     res.cookie('coderCookieToken', token, {
-      maxAge: 60 * 60 * 1000 * 24, // 1 día
-      httpOnly: true // Solo accesible por solicitudes HTTP
+      maxAge: 60 * 60 * 1000 * 24,
+      httpOnly: true,
+      secure: false // Cambiar a true en producción con HTTPS
     });
 
-    // Loguear el token en la consola
     console.log("Token generado:", token);
 
-    // Redirigir al home después de un login exitoso
     res.redirect('/');
 
   } catch (error) {

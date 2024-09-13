@@ -6,6 +6,12 @@ function addToCart(productId) {
     console.log(`Product ID: ${productId}, Quantity: ${quantity}`);
     console.log(`User ID: ${userId}`);
 
+    // Verifica si hay un usuario logueado
+    if (!userId) {
+        alert("Debe iniciar sesión para agregar productos al carrito.");
+        return;
+    }
+
     // Verifica que la cantidad esté dentro de los límites permitidos
     if (quantity < 1) {
         console.log("La cantidad es menor que 1.");

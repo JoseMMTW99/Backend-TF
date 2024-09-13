@@ -53,28 +53,6 @@ class CartController {
             res.status(500).json({ status: 'error', error: 'Error adding product to cart' });
         }
     }
-
-    removeProductFromCart = async (req, res) => {
-        const { userId, productId } = req.body;
-        try {
-            const cart = await this.cartService.removeProductFromCart(userId, productId);
-            res.status(200).json(cart);
-        } catch (error) {
-            console.error('Error removing product from cart:', error);
-            res.status(500).json({ status: 'error', error: 'Error removing product from cart' });
-        }
-    }
-
-    clearCart = async (req, res) => {
-        const { userId } = req.params;
-        try {
-            const cart = await this.cartService.clearCart(userId);
-            res.status(200).json(cart);
-        } catch (error) {
-            console.error('Error clearing cart:', error);
-            res.status(500).json({ status: 'error', error: 'Error clearing cart' });
-        }
-    }
 }
 
 module.exports = CartController;

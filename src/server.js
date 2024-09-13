@@ -17,8 +17,6 @@ const socketIO = require('socket.io');
 const cors = require('cors');
 const handleErrors = require('./middlewares/errors');
 const { addLogger } = require('./utils/logger');
-
-// CLASE 39 Importaciones de swagger
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUiExpress = require('swagger-ui-express')
 
@@ -63,6 +61,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.engine('handlebars', handlebars.engine());
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 

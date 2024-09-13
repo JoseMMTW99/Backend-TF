@@ -20,3 +20,6 @@ error: Error: Missing helper: "range" en GET /
 error: Error: Missing helper: "range" en GET /
 error: Error: Missing helper: "range" en GET /?numPage=1
 error: Error: Missing helper: "range" en GET /?numPage=1
+error: Error: Failed to lookup view "personalCart" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /cart
+error: Error: Missing helper: "calculateTotalCost" en GET /cart
+error: Error: Missing helper: "calculateTotalCost" en GET /cart

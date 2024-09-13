@@ -1,0 +1,60 @@
+{{#if cart}}
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Columna izquierda: Productos -->
+            <div class="col-md-8">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h4 class="mb-0">Carrito de: {{cart.user.first_name}} {{cart.user.last_name}}</h4>
+                    </div>
+                    <div class="card-body">
+                        {{#if cart.products.length}}
+                            <div class="row">
+                                {{#each cart.products}}
+                                    <div class="col-md-6 mb-4">
+                                        <div class="card border-light">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{title}}</h5>
+                                                <p class="card-text"><strong>Precio:</strong> ${{price}}</p>
+                                                <p class="card-text"><strong>Cantidad:</strong> {{quantity}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{/each}}
+                            </div>
+                        {{else}}
+                            <div class="alert alert-info" role="alert">
+                                Carrito vacío
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha: Datos del usuario y resumen del carrito -->
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h4 class="mb-0">Resumen del Usuario</h4>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Email:</strong> {{cart.user.email}}</p>
+                        <p><strong>Username:</strong> {{cart.user.username}}</p>
+                        
+                        <!-- Resumen del carrito -->
+                        <div class="mt-4">
+                            <h5>Resumen del Carrito</h5>
+                            <hr>
+                            <p><strong>Total Productos:</strong> {{cart.totalQuantity}}</p>
+                            <p><strong>Costo Total:</strong> ${{cart.totalCost}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{else}}
+    <div class="alert alert-warning text-center" role="alert">
+        No hay carrito para el usuario.
+    </div>
+{{/if}}
