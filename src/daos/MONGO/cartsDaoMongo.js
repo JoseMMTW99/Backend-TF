@@ -8,7 +8,6 @@ class CartsDaoMongo {
         this.model = userModel; // Asigna el modelo de usuarios
         this.productDao = new ProductsDaoMongo(); // Crea una instancia del ProductDaoMongo
     }
-
     async getAll() {
         try {
             const users = await this.model.find(); // Obtiene todos los usuarios con su carrito
@@ -17,8 +16,11 @@ class CartsDaoMongo {
             }
     
             const carts = users.map(user => {
+                // Asegúrate de que user.cart es un objeto y user.cart.products es un array
+                const cartProducts = (user.cart && Array.isArray(user.cart.products)) ? user.cart.products : [];
+    
                 // Crea una lista de productos usando el DTO
-                const products = (user.cart || []).map(item => {
+                const products = cartProducts.map(item => {
                     if (item && item.title) {
                         return new CartDto(item);
                     } else {
@@ -43,8 +45,8 @@ class CartsDaoMongo {
             console.error('Error al obtener los carritos:', error);
             throw new Error('Error al obtener los carritos');
         }
-    }       
-
+    }    
+    
     async addProduct(userId, productId, quantity) {
         try {
             const user = await this.model.findById(userId);

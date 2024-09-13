@@ -1,4 +1,5 @@
-const { cartService } = require('../service'); // Ajusta la ruta según la ubicación del servicio de carritos
+const CartDto = require('../dtos/cart.dto');
+const { cartService } = require('../service');
 
 class CartController {
     constructor() {
@@ -6,31 +7,41 @@ class CartController {
     }
 
     getAllCarts = async (req, res) => {
+        const { limit, numPage } = req.query;
         try {
-            const { limit, numPage } = req.query;
             const carts = await this.cartService.getAllCarts({ limit, numPage });
-            
+    
             // Verifica el formato de los datos
             console.log('Carts data:', carts);
     
-            // Asume que `carts` es un objeto con los datos necesarios para la plantilla
-            const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage } = carts;
+            // Extrae datos de paginación
+            const { page, hasPrevPage, hasNextPage, prevPage, nextPage } = carts;
+    
+            // Convierte los carritos a DTOs
+            const cartDtos = carts
+                .filter(cart => Array.isArray(cart.products) && cart.products.length > 0) // Filtra carritos vacíos
+                .map(cart => ({
+                    user: cart.user,
+                    products: cart.products.map(product => new CartDto(product))
+                }));
+    
+            console.log('Filtered Cart DTOs:', cartDtos); // Verifica los datos convertidos
     
             res.render('carts', {
                 styles: "carts.css",
-                carts: docs,  // Asegúrate de que docs está en el formato correcto
+                carts: cartDtos,
                 page,
                 hasPrevPage,
                 hasNextPage,
                 prevPage,
                 nextPage,
-                limit,
-            });            
+                limit
+            });
         } catch (error) {
-            console.error('Error fetching carts:', error);
-            res.status(500).send({ status: 'error', error: 'Error fetching carts' });
+            console.error('Error en getAllCarts:', error);
+            res.status(500).send({ status: 'error', error: 'Error en getAllCarts' });
         }
-    }
+    };          
     
     addProductToCart = async (req, res) => {
         const { userId, productId, quantity } = req.body;
