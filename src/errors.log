@@ -11,3 +11,10 @@ error: Error: productsList is not defined en GET /
 error: Error: productsList is not defined en GET /
 error: Error: productsList is not defined en GET /
 error: Error: productsList is not defined en GET /
+error: Error: each doesn't match if - 19:11 en GET /
+error: Error: each doesn't match if - 19:11 en GET /
+error: Error: Missing helper: "range" en GET /
+error: Error: Missing helper: "range" en GET /
+error: Error: Missing helper: "range" en GET /
+error: Error: Missing helper: "range" en GET /
+error: Error: Missing helper: "range" en GET /

@@ -3,23 +3,43 @@ const { Router } = require('express');
 const { UsersDaoMongo } = require('../daos/MONGO/usersDaoMongo');
 const auth = require('../middlewares/auth.middleware');
 const UsersController = require('../controllers/users.controller');
+const ProductsController = require('../controllers/products.controller')
 
 const router = Router();
 const userController = new UsersController();
+const productsController = new ProductsController();
 
-router.get('/', (req, res) => {
-    // Obtener los datos del usuario desde la sesión
+router.get('/', async (req, res) => {
     const user = req.session.user;
 
-    res.render('home', {
-        title: 'TF Backend',
-        styles: "home.css",
-        // Pasar los datos del usuario al template
-        username: user ? user.username : null,
-        nombre: user ? user.nombre : null,
-        apellido: user ? user.apellido : null,
-        role: user ? user.role === 'admin' : false,
-    });
+    try {
+        // Obtén el número de página de la consulta, o usa 1 por defecto
+        const numPage = parseInt(req.query.numPage) || 1;
+        const limit = 12; // Define el límite de productos que deseas mostrar
+
+        // Obtén los productos para la página correspondiente
+        const productsData = await productsController.productService.getProducts({ limit, numPage });
+
+        const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage } = productsData;
+
+        res.render('home', {
+            title: 'TF Backend',
+            styles: "home.css",
+            username: user ? user.username : null,
+            nombre: user ? user.nombre : null,
+            apellido: user ? user.apellido : null,
+            role: user ? user.role === 'admin' : false,
+            products: docs, // Pasa los productos a la vista
+            page,
+            hasPrevPage,
+            hasNextPage,
+            prevPage,
+            nextPage
+        });
+    } catch (error) {
+        console.error('Error fetching products for home:', error);
+        res.status(500).send({ status: 'error', error: 'Error fetching products for home' });
+    }
 });
 
 // Chat

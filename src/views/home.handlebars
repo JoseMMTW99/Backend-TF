@@ -1,27 +1,61 @@
 <main>
-    <div class="d-flex justify-content-end">
-        {{!-- Verificar si hay un usuario autenticado --}}
+    <!-- Cabecera de usuario -->
+    <div class="d-flex justify-content-end align-items-center py-2 px-3">
         {{#if username}}
-            <a href="/api/sessions/logout" class="btn btn-outline-danger w-25 ms-auto">Logout</a>
+            <span class="ms-3 fw-bold">{{ nombre }} {{ apellido }} {{#if role}}<small class="text-muted">(Admin)</small>{{/if}}</span>
+            <a href="/api/sessions/logout" class="btn btn-outline-danger ms-2">Logout</a>
         {{else}}
-            <a href="/login" class="btn btn-outline-primary w-25 ms-auto">Login</a>
+            <a href="/login" class="btn btn-outline-primary ms-2">Login</a>
         {{/if}}
     </div>
 
-    <h1 class="pt-3">Home</h1>
+    <!-- Título principal -->
+    <div class="text-center mt-4">
+        <h1 class="pt-3">Home</h1>
+    </div>
 
-    {{!-- Mostrar mensaje de bienvenida y detalles del usuario --}}
-    {{#if username}}
-        {{!-- Verificar si el rol del usuario es 'admin' --}}
-        {{#if role}}
-            <h3>Bienvenido, {{ nombre }} {{ apellido }}. Usted es admin</h3>
-            <br>
-        {{else}}
-            <h3>Bienvenido, {{ nombre }} {{ apellido }}.</h3><br>
-        {{/if}}
-    {{else}}
-        <h3>Bienvenido</h3>
-    {{/if}}
+    <!-- Listado de productos -->
+    <div class="row row-cols-1 row-cols-md-4 g-4 p-5">
+        {{#each products}}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ this.title }}</h5>
+                        <p class="card-text">{{ this.description }}</p>
+                        <p class="card-text fw-bold">Precio: ${{ this.price }}</p>
+                        <p class="card-text">Categoría: {{ this.category }}</p>
+                        <p class="card-text">Stock: {{ this.stock }}</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-dark w-100" onclick="addToCart('{{ this._id }}')">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+
+    <!-- Paginación -->
+    <nav aria-label="Page navigation" class="pb-5">
+        <ul class="pagination justify-content-center">
+            {{#if hasPrevPage}}
+                <li class="page-item">
+                    <a class="page-link" href="/?numPage={{prevPage}}" aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {{/if}}
+            <li class="page-item disabled">
+                <span class="page-link">{{page}}</span>
+            </li>
+            {{#if hasNextPage}}
+                <li class="page-item">
+                    <a class="page-link" href="/?numPage={{nextPage}}" aria-label="Siguiente">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {{/if}}
+        </ul>
+    </nav>
 </main>
 
 <script src="/js/home.js"></script>
