@@ -1,13 +1,12 @@
 class CartDto {
-    constructor(cart) {
-        this.userId = cart.userId; // ID del usuario al que pertenece el carrito
-        this.products = cart.products.map(product => ({
-            title: product.title,
-            description: product.description,
-            price: product.price,
-            category: product.category,
-            stock: product.stock
-        })); // Lista de productos en el carrito
+    constructor(product) {
+        this.productId = product._id;
+        this.title = product.title;
+        this.description = product.description;
+        this.price = product.price;
+        this.category = product.category;
+        this.stock = product.stock;
+        this.quantity = product.quantity;
     }
 }
 

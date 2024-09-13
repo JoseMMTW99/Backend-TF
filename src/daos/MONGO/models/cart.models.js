@@ -1,21 +1,22 @@
-const { Schema, model } = require('mongoose');
-
-const CartSchema = new Schema({
-    // userID: String
-    products: {
-        type: [{
-            product: {
-                type: Schema.Types.ObjectId,
-                ref: 'prpducts'
-            },
-            // quantity: Number
-        }]
+const userSchema = new mongoose.Schema({
+    first_name: String,
+    last_name: String,
+    email: String,
+    password: String,
+    role: String,
+    cart: {
+        products: [
+            {
+                productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+                quantity: Number,
+                price: Number,
+                title: String,
+                description: String,
+                category: String,
+                stock: Number
+            }
+        ]
     }
-})
+});
 
-CartSchema.pre('find', function(){
-    this.populate('products.product')
-})
-
-const cartsModel = model('carts', CartSchema);
-module.exports = { cartsModel };
+const User = mongoose.model('User', userSchema);

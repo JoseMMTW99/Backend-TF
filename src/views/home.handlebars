@@ -25,9 +25,11 @@
                         <p class="card-text fw-bold">Precio: ${{ this.price }}</p>
                         <p class="card-text">Categoría: {{ this.category }}</p>
                         <p class="card-text">Stock: {{ this.stock }}</p>
-                    </div>
-                    <div class="card-footer text-center">
-                        <button class="btn btn-dark w-100" onclick="addToCart('{{ this._id }}')">Agregar al carrito</button>
+                        <!-- Campo para la cantidad -->
+                        <div class="input-group mb-3">
+                            <input type="number" id="quantity-{{this._id}}" min="1" max="{{this.stock}}" value="1" class="form-control" aria-label="Cantidad">
+                            <button class="btn btn-dark" onclick="addToCart('{{ this._id }}')">Agregar al carrito</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -56,6 +58,12 @@
             {{/if}}
         </ul>
     </nav>
+
+<script>
+    window.userId = "{{userId}}";
+</script>
+
+
 </main>
 
 <script src="/js/home.js"></script>

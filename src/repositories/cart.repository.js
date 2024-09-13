@@ -1,25 +1,43 @@
 const CartDto = require("../dtos/cart.dto");
-const { CartsDaoMongo } = require('../daos/MONGO/cartsDaoMongo');
+const { CartsDaoMongo } = require('../daos/MONGO/cartsDaoMongo'); // Asegúrate de que la ruta sea correcta
 
 class CartRepository {
     constructor() {
         this.cartDao = new CartsDaoMongo(); // Inicializa con una instancia de CartsDaoMongo
     }
 
-    async getAllCarts({ limit = 5, numPage = 1 }) {
-        return await this.cartDao.getAll({ limit, numPage });
+    // Obtener todos los carritos
+    async getAllCarts() {
+        return await this.cartDao.getAll();
     }
 
-    async addProductToCart(cartId, productId, quantity) {
-        return await this.cartDao.addProduct(cartId, productId, quantity);
+    // Agregar un producto al carrito con todos los datos del producto más la cantidad
+    async addProductToCart(userId, productId, quantity) {
+    // Obtener el producto completo utilizando el productoDao
+    const product = await this.cartDao.productDao.getById(productId);
+
+    if (!product) {
+        throw new Error('Producto no encontrado');
     }
 
-    async removeProductFromCart(cartId, productId) {
-        return await this.cartDao.removeProduct(cartId, productId);
+    // Crear el DTO del producto incluyendo la cantidad
+    const productDto = new CartDto({
+        ...product._doc, // Copiar todos los campos del producto
+        quantity // Agregar la cantidad al DTO
+    });
+
+    // Llamar al método addProduct del DAO para agregar el producto al carrito
+    return await this.cartDao.addProduct(userId, productDto.productId, productDto.quantity);
     }
 
-    async deleteCart(cartId) {
-        return await this.cartDao.remove(cartId);
+    // Eliminar un producto del carrito
+    async removeProductFromCart(userId, productId) {
+        return await this.cartDao.deleteProduct(userId, productId);
+    }
+
+    // Vaciar el carrito de un usuario
+    async deleteCart(userId) {
+        return await this.cartDao.clearCart(userId);
     }
 }
 

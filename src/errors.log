@@ -18,3 +18,5 @@ error: Error: Missing helper: "range" en GET /
 error: Error: Missing helper: "range" en GET /
 error: Error: Missing helper: "range" en GET /
 error: Error: Missing helper: "range" en GET /
+error: Error: Missing helper: "range" en GET /?numPage=1
+error: Error: Missing helper: "range" en GET /?numPage=1

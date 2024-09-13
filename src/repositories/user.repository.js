@@ -1,5 +1,5 @@
 const UserDto = require("../dtos/user.dto");
-const { UsersDaoMongo } = require('../daos/MONGO/usersDaoMongo');
+const { UsersDaoMongo } = require('../daos/MONGO/usersDaoMongo')
 
 class UserRepository {
     constructor() {

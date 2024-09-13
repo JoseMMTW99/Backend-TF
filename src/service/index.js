@@ -1,17 +1,16 @@
-const { ProductsDaoMongo } = require('../daos/MONGO/productsDaoMongo');
-const { UsersDaoMongo } = require('../daos/MONGO/usersDaoMongo');
-const CartRepository = require('../repositories/cart.repository');
+const { CartsDao, UsersDao, ProductsDao } = require('../daos/factory');
+const UserRepository = require('../repositories/user.repository');
 const ProductRepository = require('../repositories/product.repository');
-const UserRepository = require('../repositories/user.repository')
-const { initializeDaos, UsersDao, ProductsDao, CartsDao } = require('../daos/factory');
+const CartRepository = require('../repositories/cart.repository');
 
-let usersService = new UserRepository(UsersDao);
-let productsService  = new ProductRepository(ProductsDao);
-let cartService = new CartRepository(CartsDao);
+// Inicializa los repositorios con los DAOs
+const usersService = new UserRepository(UsersDao);
+const productsService = new ProductRepository(ProductsDao);
+const cartService = new CartRepository(CartsDao);
 
-// Exportar los servicios después de la inicialización
+// Exporta los servicios
 module.exports = {
     userService: usersService,
     productService: productsService,
-    cartService: cartService 
+    cartService: cartService
 };

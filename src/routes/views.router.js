@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 
         // Obtén los productos para la página correspondiente
         const productsData = await productsController.productService.getProducts({ limit, numPage });
-
+        
         const { docs, page, hasPrevPage, hasNextPage, prevPage, nextPage } = productsData;
 
         res.render('home', {
@@ -29,6 +29,7 @@ router.get('/', async (req, res) => {
             nombre: user ? user.nombre : null,
             apellido: user ? user.apellido : null,
             role: user ? user.role === 'admin' : false,
+            userId: user ? user.id : null, // Agrega el userId
             products: docs, // Pasa los productos a la vista
             page,
             hasPrevPage,

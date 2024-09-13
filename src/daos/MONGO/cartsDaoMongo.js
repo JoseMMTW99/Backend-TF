@@ -1,83 +1,134 @@
-const { cartsModel } = require("./models/cart.models");
+const { userModel } = require("./models/users.models"); // Ajusta la ruta según la ubicación del modelo
+const CartDto = require('../../dtos/cart.dto');
+const ProductDto = require('../../dtos/product.dto');
+const { ProductsDaoMongo } = require('../MONGO/productsDaoMongo'); // Ajusta la ruta según la ubicación del modelo
 
 class CartsDaoMongo {
-    constructor(){
-        this.model = cartsModel;
+    constructor() {
+        this.model = userModel; // Asigna el modelo de usuarios
+        this.productDao = new ProductsDaoMongo(); // Crea una instancia del ProductDaoMongo
     }
 
-    // Obtener todos los carritos
-    getAll = async ({ limit = 5, numPage = 1 }) => {
+    async getAll() {
         try {
-            // Verifica el resultado de la consulta
-            const carts = await this.model.find().skip((numPage - 1) * limit).limit(limit);
-            console.log('Carts from DAO:', carts);
-            return { docs: carts, page: numPage, hasPrevPage: false, hasNextPage: false, prevPage: null, nextPage: null };
+            const users = await this.model.find(); // Obtiene todos los usuarios con su carrito
+            if (!users || users.length === 0) {
+                return []; // Devuelve una lista vacía si no hay usuarios
+            }
+    
+            const carts = users.map(user => {
+                // Crea una lista de productos usando el DTO
+                const products = (user.cart || []).map(item => {
+                    if (item && item.title) {
+                        return new CartDto(item);
+                    } else {
+                        console.warn('Producto no definido en el carrito:', item);
+                        return null;
+                    }
+                }).filter(product => product !== null); // Filtra los productos inválidos
+    
+                return {
+                    user: {
+                        first_name: user.first_name,
+                        last_name: user.last_name,
+                        email: user.email,
+                        username: user.username
+                    },
+                    products: products
+                };
+            });
+    
+            return carts;
         } catch (error) {
+            console.error('Error al obtener los carritos:', error);
             throw new Error('Error al obtener los carritos');
         }
-    }
+    }       
 
-    // Agregar un producto a un carrito
-    addProduct = async (cid, pid, quantity) => {
+    async addProduct(userId, productId, quantity) {
         try {
-            // Encuentra el carrito por ID
-            const cart = await this.model.findById(cid);
-            if (!cart) {
-                throw new Error('Carrito no encontrado');
+            const user = await this.model.findById(userId);
+            if (!user) {
+                throw new Error('Usuario no encontrado');
             }
-
-            // Agrega el producto al carrito
-            // Verifica si el producto ya está en el carrito
-            const productIndex = cart.products.findIndex(p => p.product.toString() === pid);
+    
+            const product = await this.productDao.getById(productId);
+            if (!product) {
+                throw new Error('Producto no encontrado');
+            }
+    
+            const productDto = new ProductDto(product);
+    
+            if (!user.cart) {
+                user.cart = { products: [] };
+            }
+            
+            if (!Array.isArray(user.cart.products)) {
+                user.cart.products = [];
+            }            
+    
+            const productIndex = user.cart.products.findIndex(p => p.productId.toString() === productId);
             if (productIndex !== -1) {
-                // Si el producto ya está, solo actualiza la cantidad
-                cart.products[productIndex].quantity += quantity;
+                user.cart.products[productIndex].quantity += quantity;
+                user.cart.products[productIndex].price = productDto.price;
             } else {
-                // Si el producto no está, lo agrega
-                cart.products.push({ product: pid, quantity });
+                user.cart.products.push({ 
+                    productId, 
+                    quantity, 
+                    price: productDto.price, 
+                    title: productDto.title,
+                    description: productDto.description,
+                    category: productDto.category,
+                    stock: productDto.stock
+                });
+            }
+    
+            console.log('Carrito antes de guardar:', user.cart);
+    
+            // Actualiza el carrito del usuario
+            user.markModified('cart'); // Marca 'cart' como modificado
+    
+            await user.save();
+    
+            console.log('Usuario guardado con éxito:', user);
+    
+            return user.cart;
+        } catch (error) {
+            console.error('Error al agregar producto al carrito:', error);
+            throw new Error('Error al agregar producto al carrito');
+        }
+    }    
+
+    // Eliminar un producto del carrito de un usuario
+    async deleteProduct(userId, productId) {
+        try {
+            const user = await this.model.findById(userId);
+            if (!user) {
+                throw new Error('Usuario no encontrado');
             }
 
-            // Guarda los cambios en el carrito
-            return await this.model.findByIdAndUpdate(cid, cart, { new: true });
+            user.cart.products = user.cart.products.filter(p => p.productId.toString() !== productId);
+            await user.save();
+            return user.cart;
         } catch (error) {
-            throw new Error('Error al agregar el producto al carrito');
+            console.error('Error al eliminar producto del carrito:', error);
+            throw new Error('Error al eliminar producto del carrito');
         }
     }
 
-    // Eliminar un producto de un carrito
-    removeProduct = async (cid, pid) => {
+    // Vaciar todos los productos del carrito pero no eliminar el carrito
+    async clearCart(userId) {
         try {
-            // Encuentra el carrito por ID
-            const cart = await this.model.findById(cid);
-            if (!cart) {
-                throw new Error('Carrito no encontrado');
+            const user = await this.model.findById(userId);
+            if (!user) {
+                throw new Error('Usuario no encontrado');
             }
 
-            // Filtra los productos para eliminar el especificado
-            cart.products = cart.products.filter(p => p.product.toString() !== pid);
-
-            // Guarda los cambios en el carrito
-            return await this.model.findByIdAndUpdate(cid, cart, { new: true });
+            user.cart.products = [];
+            await user.save();
+            return user.cart;
         } catch (error) {
-            throw new Error('Error al eliminar el producto del carrito');
-        }
-    }
-
-    // Vaciar el carrito (remover todos los productos)
-    deleteCart = async (cid) => {
-        try {
-            // Encuentra el carrito por ID
-            const cart = await this.model.findById(cid);
-            if (!cart) {
-                throw new Error('Carrito no encontrado');
-            }
-
-            // Vacía el carrito
-            cart.products = [];
-
-            // Guarda los cambios en el carrito
-            return await this.model.findByIdAndUpdate(cid, cart, { new: true });
-        } catch (error) {
+            console.error('Error al vaciar el carrito:', error);
             throw new Error('Error al vaciar el carrito');
         }
     }
