@@ -10,6 +10,7 @@ const cookiesRouter = require('./api/cookies.router');
 const sessionsRouter = require('./api/sessions.router');
 const pruebasRouter = require('./api/pruebas.router');
 const mocksRouter = require('./api/mocks.router');
+const paymentsRouter = require('./api/payments.router');
 
 const router = Router();
 
@@ -33,6 +34,8 @@ router.use('/api/sessions', sessionsRouter)
 router.use('/pruebas', pruebasRouter)
 // http:localhost:8080/mocks
 router.use('/mocks', mocksRouter)
+// http:localhost:8080/pay
+router.use('/payments', paymentsRouter)
 
 // MIDDLEWARE PARA SUBIR ARCHIVOS (configurado en el archivo "index.html")
 router.use('/subir-archivo', uploader.single('myFile'), (req, res) => {

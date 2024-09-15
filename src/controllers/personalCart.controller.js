@@ -1,6 +1,7 @@
 const CartDto = require('../dtos/cart.dto');
 const { cartService } = require('../service');
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 class PersonalCartController {
     constructor() {
@@ -47,6 +48,7 @@ class PersonalCartController {
             const { page = 1, hasPrevPage = false, hasNextPage = false, prevPage = null, nextPage = null } = carts;
 
             const token = req.session.token;
+            const tokenStripe = process.env.STRIPE_KEY
             console.log(token)
     
             res.render('personalCart', {
@@ -58,7 +60,8 @@ class PersonalCartController {
                 prevPage,
                 nextPage,
                 limit,
-                token
+                token,
+                tokenStripe
             });
         } catch (error) {
             console.error('Error en getPersonalCart:', error);

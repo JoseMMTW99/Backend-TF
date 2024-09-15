@@ -43,6 +43,12 @@ router.get('/', async (req, res) => {
     }
 });
 
+const handlebars = require('handlebars');
+handlebars.registerHelper('json', function(context) {
+  return JSON.stringify(context);
+});
+
+
 // Chat
 router.get('/chat', (req, res) => {
     res.render('chat', {styles: "chat.css"})

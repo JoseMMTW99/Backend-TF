@@ -1,73 +1,106 @@
 {{#if cart}}
-    <div class="container mt-4">
-        <div class="row">
-            <!-- Columna izquierda: Productos -->
-            <div class="col-md-8">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-dark text-white">
-                        <h4 class="mb-0">Carrito de: {{cart.user.first_name}} {{cart.user.last_name}}</h4>
-                    </div>
-                    <div class="card-body">
-                        <!-- Almacenar el ID del usuario y el token de autenticación -->
-                        <span id="userId" data-user-id="{{cart.user._id}}" style="display: none;"></span>
-                        <input type="hidden" id="authToken" value="{{token}}" /> <!-- Token oculto -->
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Columna izquierda: Productos -->
+      <div class="col-md-8">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Carrito de: {{cart.user.first_name}} {{cart.user.last_name}}</h4>
+          </div>
+          <div class="card-body">
+            <!-- Almacenar el ID del usuario y el token de autenticación -->
+            <span id="userId" data-user-id="{{cart.user._id}}" style="display: none;"></span>
+            <input type="hidden" id="authToken" value="{{token}}" />
+            <!-- Token oculto -->
 
-                        {{#if cart.products.length}}
-                            <div class="row">
-                                {{#each cart.products}}
-                                    <div class="col-md-6 mb-4">
-                                        <div class="card border-light">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{title}}</h5>
-                                                <p class="card-text"><strong>Precio:</strong> ${{price}}</p>
-                                                <p class="card-text"><strong>Cantidad:</strong> {{quantity}}</p>
-                                                <!-- Mostrar el productId -->
-                                                <p class="card-text"><strong>ID del Producto:</strong> {{productId}}</p>
-                                                <!-- Botón para eliminar producto -->
-                                                <button class="btn btn-danger" data-product-id="{{productId}}">Eliminar del carrito</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {{/each}}
-                            </div>
-                            <!-- Botón para eliminar todo el carrito, solo si hay productos -->
-                            <button class="btn btn-danger mt-4" onclick="clearCart()">Eliminar todo el carrito</button>
-                        {{else}}
-                            <div class="alert alert-info" role="alert">
-                                Carrito vacío
-                            </div>
-                        {{/if}}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Columna derecha: Datos del usuario y resumen del carrito -->
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-dark text-white">
-                        <h4 class="mb-0">Resumen del Usuario</h4>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Email:</strong> {{cart.user.email}}</p>
-                        <p><strong>Username:</strong> {{cart.user.username}}</p>
-                        
-                        <!-- Resumen del carrito -->
-                        <div class="mt-4">
-                            <h5>Resumen del Carrito</h5>
-                            <hr>
-                            <p><strong>Total Productos:</strong> {{cart.totalQuantity}}</p>
-                            <p><strong>Costo Total:</strong> ${{cart.totalCost}}</p>
+            {{#if cart.products.length}}
+              <div class="row">
+                {{#each cart.products}}
+                  <div class="col-md-6 mb-4">
+                    <div class="card border-light">
+                      <div class="card-body">
+                        <h5 class="card-title">{{title}}</h5>
+                        <p class="card-text"><strong>Precio:</strong> ${{price}}</p>
+                        <p class="card-text"><strong>Cantidad:</strong> {{quantity}}</p>
+                        <!-- Alineación del botón a la derecha -->
+                        <div class="text-end">
+                          <button class="btn btn-danger" data-product-id="{{productId}}">Eliminar del carrito</button>
                         </div>
+                      </div>
                     </div>
+                  </div>
+                {{/each}}
+              </div>
+
+              <div class="text-end mt-4">
+                <button class="btn btn-danger" onclick="clearCart()">Eliminar todo el carrito</button>
+              </div>
+
+              <!-- Sección de pago -->
+              <div class="card mt-4">
+                <div class="card-header bg-dark text-white">
+                  <h4 class="mb-0">Detalles de Pago</h4>
                 </div>
-            </div>
+                <div class="card-body">
+                  <form id="checkoutForm">
+                    <div class="mb-3">
+                      <label for="cardholder-name" class="form-label">Nombre del Titular de la Tarjeta</label>
+                      <input type="text" id="cardholder-name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="cardholder-email" class="form-label">Email del Titular de la Tarjeta</label>
+                      <input type="email" id="cardholder-email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="card-element" class="form-label">Detalles de la Tarjeta</label>
+                      <div id="card-element" class="form-control">
+                        <!-- Elemento de la tarjeta de Stripe se montará aquí -->
+                      </div>
+                    </div>
+                    <div class="text-end">
+                      <button type="submit" class="btn btn-primary">Pagar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            {{else}}
+              <div class="alert alert-info" role="alert">
+                Carrito vacío
+              </div>
+            {{/if}}
+          </div>
         </div>
+      </div>
+
+      <!-- Columna derecha: Datos del usuario y resumen del carrito -->
+      <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Resumen del Usuario</h4>
+          </div>
+          <div class="card-body">
+            <p><strong>Email:</strong> {{cart.user.email}}</p>
+            <p><strong>Username:</strong> {{cart.user.username}}</p>
+            <div class="mt-4">
+              <h5>Resumen del Carrito</h5>
+              <hr />
+              <p><strong>Total Productos:</strong> {{cart.totalQuantity}}</p>
+              <p><strong>Costo Total:</strong> ${{cart.totalCost}}</p>
+              <input type="hidden" id="cart-total-cost" value="{{cart.totalCost}}" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 {{else}}
-    <div class="alert alert-warning text-center" role="alert">
-        No hay carrito para el usuario.
-    </div>
+  <div class="alert alert-warning text-center" role="alert">
+    No hay carrito para el usuario.
+  </div>
 {{/if}}
 
-<!-- Script para manejar las acciones del carrito -->
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/personalCart.js"></script>
+<script src="/js/payments.js"></script>

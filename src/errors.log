@@ -23,3 +23,27 @@ error: Error: Missing helper: "range" en GET /?numPage=1
 error: Error: Failed to lookup view "personalCart" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /cart
 error: Error: Missing helper: "calculateTotalCost" en GET /cart
 error: Error: Missing helper: "calculateTotalCost" en GET /cart
+error: Error: Missing helper: "json" en GET /cart
+error: Error: Missing helper: "json" en GET /cart
+error: Error: Missing helper: "math" en GET /cart
+error: Error: Missing helper: "math" en GET /cart
+error: Error: Parse error on line 59:
+...      value="{{cart.totalCost*100}}" <!-
+-----------------------^
+Expecting 'ID', got 'INVALID' en GET /cart
+error: Error: Parse error on line 59:
+...      value="{{cart.totalCost*100}}" <!-
+-----------------------^
+Expecting 'ID', got 'INVALID' en GET /cart
+error: Error: Parse error on line 116:
+...alCart.js"></script>
+-----------------------^
+Expecting 'OPEN_INVERSE_CHAIN', 'INVERSE', 'OPEN_ENDBLOCK', got 'EOF' en GET /cart
+error: Error: Parse error on line 59:
+...e="{{cart.totalCost * 100}}" <!-- Convie
+-----------------------^
+Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'INVALID' en GET /cart
+error: Error: Parse error on line 59:
+...e="{{cart.totalCost * 100}}" <!-- Convie
+-----------------------^
+Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'INVALID' en GET /cart
