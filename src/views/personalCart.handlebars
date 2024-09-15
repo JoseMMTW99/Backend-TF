@@ -30,13 +30,13 @@
                                     </div>
                                 {{/each}}
                             </div>
+                            <!-- Botón para eliminar todo el carrito, solo si hay productos -->
+                            <button class="btn btn-danger mt-4" onclick="clearCart()">Eliminar todo el carrito</button>
                         {{else}}
                             <div class="alert alert-info" role="alert">
                                 Carrito vacío
                             </div>
                         {{/if}}
-                        <!-- Botón para eliminar todo el carrito -->
-                        <button class="btn btn-danger mt-4" onclick="clearCart()">Eliminar todo el carrito</button>
                     </div>
                 </div>
             </div>

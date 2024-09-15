@@ -4,12 +4,10 @@ const PersonalCartController = require('../../controllers/personalCart.controlle
 const personalCartController = new PersonalCartController();
 
 // Desestructuración de los métodos del controlador del carrito
-const { getPersonalCart, deleteCartProduct } = personalCartController;
+const { getPersonalCart, deleteCartProduct, clearCart } = personalCartController;
 
 router.get('/', getPersonalCart);
-router.delete('/:cartId/products/:productId', (req, res) => {
-    console.log('Solicitud DELETE recibida:', req.params);
-    deleteCartProduct(req, res);
-});
+router.delete('/:cartId/products/:productId', deleteCartProduct);
+router.delete('/:userId/clearCart', clearCart);
 
 module.exports = router;

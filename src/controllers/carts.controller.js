@@ -48,6 +48,6 @@ class CartController {
             res.status(500).json({ status: 'error', error: 'Error adding product to cart' });
         }
     }
-}    
+}
 
 module.exports = CartController;

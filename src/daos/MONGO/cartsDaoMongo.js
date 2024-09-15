@@ -125,6 +125,25 @@ class CartsDaoMongo {
         throw new Error(`Error al eliminar el producto del carrito: ${error.message}`);
     }
 }
+
+// Limpiar todos los productos del carrito de un usuario
+async clearCart(userId) {
+  try {
+    // Actualiza el carrito del usuario, estableciendo 'products' como un array vacío
+    const result = await this.model.updateOne(
+      { _id: userId },
+      { $set: { 'cart.products': [] } }
+    );
+
+    if (result.nModified === 0) {
+      throw new Error('No se encontró el carrito para limpiar');
+    }
+    return result;
+  } catch (error) {
+    console.error('Error al limpiar el carrito:', error);
+    throw new Error('Error al limpiar el carrito');
+  }
+}
 }
 
 module.exports = {

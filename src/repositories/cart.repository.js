@@ -51,6 +51,24 @@ class CartRepository {
         }
     }
 
+    // Limpiar el carrito del usuario
+    async clearCart(userId) {
+        try {
+            // Llamar al método clearCart del CartsDaoMongo
+            const result = await this.cartDao.clearCart(userId);
+
+            // Comprobar si se realizó alguna modificación
+            if (result.nModified === 0) {
+                console.log('No se encontró el carrito para limpiar');
+                return { nModified: 0 };
+            }
+
+            return result;
+        } catch (error) {
+            console.error('Error al limpiar el carrito en el repositorio:', error);
+            throw new Error('Error al limpiar el carrito');
+        }
+    }
 }
 
 module.exports = CartRepository;

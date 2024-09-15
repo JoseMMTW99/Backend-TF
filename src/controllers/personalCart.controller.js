@@ -104,7 +104,34 @@ class PersonalCartController {
         res.status(500).send({ status: 'error', error: 'Error al eliminar el producto del carrito' });
     }
 };
+clearCart = async (req, res) => {
+    const user = req.session.user;
+    const userId = user ? user.id : null;
 
+    if (!userId) {
+        return res.status(401).send({ status: 'error', error: 'Usuario no autenticado' });
+    }
+
+    try {
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            console.log('Invalid user ID:', userId);
+            return res.status(400).send({ status: 'error', error: 'ID de usuario inválido' });
+        }
+
+        const userIdObjectId = new mongoose.Types.ObjectId(userId);
+        const result = await this.cartService.clearCart(userIdObjectId);
+
+        if (result.nModified === 0) {
+            console.log('No se encontró el carrito para limpiar');
+            return res.status(404).send({ status: 'error', error: 'Carrito no encontrado' });
+        }
+
+        res.json({ status: 'success', message: 'Carrito limpiado con éxito' });
+    } catch (error) {
+        console.error('Error al limpiar el carrito:', error);
+        res.status(500).send({ status: 'error', error: 'Error al limpiar el carrito' });
+    }
+};
 
     }
 

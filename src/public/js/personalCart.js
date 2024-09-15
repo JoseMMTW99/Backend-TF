@@ -56,3 +56,45 @@ function removeProduct(productId) {
         console.error('Error en la solicitud de eliminación:', error);
     });
 }
+
+function clearCart() {
+    console.log("clearCart ha sido llamada");
+
+    const userId = document.getElementById('userId').getAttribute('data-user-id');
+    const token = document.getElementById('authToken').value; // Capturamos el token
+
+    if (!userId || !token) {
+        console.error('No se pudo obtener el ID del usuario o el token.');
+        return;
+    }
+
+    console.log('User ID:', userId);
+    console.log('Token:', token); // Verificamos que tenemos el token
+
+    fetch(`/cart/${userId}/clearCart`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        console.log("Respuesta del servidor:", response);
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Datos recibidos:", data);
+        if (data.status === 'success') {
+            console.log('Carrito limpiado con éxito');
+            location.reload();
+        } else {
+            console.error('Error al limpiar el carrito:', data.error || 'Error desconocido');
+        }
+    })
+    .catch(error => {
+        console.error('Error en la solicitud de limpieza del carrito:', error);
+    });
+}
