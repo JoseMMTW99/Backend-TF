@@ -5,7 +5,7 @@ const CartController = require('../../controllers/carts.controller');
 const cartController = new CartController();
 
 // Desestructuración de los métodos del controlador del carrito
-const { getAllCarts, addProductToCart, removeProductFromCart, clearCart } = cartController;
+const { getAllCarts, addProductToCart } = cartController;
 
 // Definición de rutas del carrito
 router.get('/', getAllCarts); // Obtener todos los carritos con paginación

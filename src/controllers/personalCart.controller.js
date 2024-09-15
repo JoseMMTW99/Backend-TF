@@ -17,22 +17,14 @@ class PersonalCartController {
         }
     
         try {
-            // Verifica y convierte userId a ObjectId si es válido
             if (!mongoose.Types.ObjectId.isValid(userId)) {
                 console.log('Invalid user ID:', userId);
                 return res.status(400).send({ status: 'error', error: 'ID de usuario inválido' });
             }
     
             const userIdObjectId = new mongoose.Types.ObjectId(userId);
-    
-            // Consulta todos los carritos
             const carts = await this.cartService.getAllCarts({ limit, numPage });
     
-            // Imprime los datos de los carritos y el userId para depuración
-            console.log('Carts data:', carts);
-            console.log('User ID:', userId);
-    
-            // Filtra el carrito del usuario autenticado
             const userCart = Array.isArray(carts)
                 ? carts.find(cart => cart.user && cart.user._id && cart.user._id.equals(userIdObjectId))
                 : null;
@@ -42,20 +34,20 @@ class PersonalCartController {
                 return res.status(404).send({ status: 'error', error: 'Carrito no encontrado' });
             }
     
-            // Calcula el costo total y la cantidad total de productos
             const totalCost = userCart.products.reduce((total, product) => total + (product.price * product.quantity), 0);
             const totalQuantity = userCart.products.reduce((total, product) => total + product.quantity, 0);
     
-            // Convierte el carrito a DTO
             const cartDto = {
                 user: userCart.user,
-                products: userCart.products.map(product => new CartDto(product)),
-                totalCost: totalCost.toFixed(2),  // Añadido como string con dos decimales
+                products: userCart.products.map(product => new CartDto(product)), // Asegúrate de que CartDto incluya productId
+                totalCost: totalCost.toFixed(2),
                 totalQuantity
             };
     
-            // Extrae datos de paginación (ajusta según sea necesario)
             const { page = 1, hasPrevPage = false, hasNextPage = false, prevPage = null, nextPage = null } = carts;
+
+            const token = req.session.token;
+            console.log(token)
     
             res.render('personalCart', {
                 styles: "carts.css",
@@ -65,35 +57,55 @@ class PersonalCartController {
                 hasNextPage,
                 prevPage,
                 nextPage,
-                limit
+                limit,
+                token
             });
         } catch (error) {
             console.error('Error en getPersonalCart:', error);
             res.status(500).send({ status: 'error', error: 'Error en getPersonalCart' });
         }
-    };                    
+    };
+    
 
-    removeProductFromCart = async (req, res) => {
-        const { userId, productId } = req.body;
-        try {
-            const cart = await this.cartService.removeProductFromCart(userId, productId);
-            res.status(200).json(cart);
-        } catch (error) {
-            console.error('Error removing product from cart:', error);
-            res.status(500).json({ status: 'error', error: 'Error removing product from cart' });
-        }
-    }
+   // Método para eliminar un producto del carrito
+   deleteCartProduct = async (req, res) => {
+    const { cartId, productId } = req.params;
 
-    clearCart = async (req, res) => {
-        const { userId } = req.params;
-        try {
-            const cart = await this.cartService.clearCart(userId);
-            res.status(200).json(cart);
-        } catch (error) {
-            console.error('Error clearing cart:', error);
-            res.status(500).json({ status: 'error', error: 'Error clearing cart' });
+    // Aquí no verificamos autenticación si quieres que cualquier usuario pueda eliminar productos
+    // Si solo quieres permitir que los usuarios eliminen productos de su propio carrito, necesitarás una verificación
+    
+    try {
+        // Validar IDs de carrito y producto
+        if (!mongoose.Types.ObjectId.isValid(cartId)) {
+            console.log('ID de carrito inválido:', cartId);
+            return res.status(400).send({ status: 'error', error: 'ID de carrito inválido' });
         }
+
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            console.log('ID de producto inválido:', productId);
+            return res.status(400).send({ status: 'error', error: 'ID de producto inválido' });
+        }
+
+        const cartIdObjectId = new mongoose.Types.ObjectId(cartId);
+        const productIdObjectId = new mongoose.Types.ObjectId(productId);
+
+        // Llama al servicio para eliminar el producto del carrito
+        const result = await this.cartService.removeProductFromCart(cartIdObjectId, productIdObjectId);
+
+        // Verificar el resultado de la operación
+        if (result.nModified === 0) {
+            console.log('No se encontró el producto para eliminar');
+            return res.status(404).send({ status: 'error', error: 'Producto no encontrado en el carrito' });
+        }
+
+        res.json({ status: 'success' });
+    } catch (error) {
+        console.error('Error al eliminar el producto del carrito:', error);
+        res.status(500).send({ status: 'error', error: 'Error al eliminar el producto del carrito' });
     }
-}
+};
+
+
+    }
 
 module.exports = PersonalCartController;

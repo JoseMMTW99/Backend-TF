@@ -8,7 +8,7 @@ const productSchema = new Schema({
     productId: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'Product' // Asume que tienes un modelo de Producto
+        ref: 'Product' // Asegúrate de que el modelo de Producto esté definido correctamente
     },
     quantity: {
         type: Number,
@@ -46,15 +46,20 @@ const UserSchema = new Schema({
         type: String,
         index: true
     },
-    last_name: String,
+    last_name: {
+        type: String,
+    },
     email: {
         type: String,
         required: true,
         unique: true
     },
-    password: String,
+    password: {
+        type: String,
+    },
     role: {
         type: String,
+        enum: ['user', 'admin'], // Valores permitidos para el rol
         default: 'user'
     },
     cart: {

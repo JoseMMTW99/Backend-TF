@@ -39,12 +39,16 @@ class ProductsDaoMongo {
     // Obtener un producto por ID
     getById = async (pid) => {
         try {
-            return await this.model.findById(pid);
+            const product = await this.model.findById(pid).lean(); // Usa `lean` para obtener un objeto simple
+            if (!product) {
+                throw new Error('Producto no encontrado'); // Maneja el caso cuando no se encuentra el producto
+            }
+            return product;
         } catch (error) {
             console.error('Error al obtener producto por ID:', error);
             throw error;
         }
-    }
+    }    
 
     // Crear un nuevo producto
     create = async (productData) => {

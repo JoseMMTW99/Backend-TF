@@ -1,58 +1,51 @@
-const express = require("express");
 const { Router } = require("express");
-const auth = require("../../middlewares/auth.middleware");
-const { UsersDaoMongo } = require("../../daos/MONGO/usersDaoMongo");
 const { createHash, isValidPassword } = require("../../utils/bcrypt");
 const passport = require("passport");
-const { generateToken, authToken } = require("../../utils/jsonwebtoken");
-const passportCall = require("../../utils/passportCall");
-const authorization = require("../../utils/authorizationJWT");
+const { generateToken } = require("../../utils/jsonwebtoken");
 
 const router = Router();
 
-const UserRepository  = require('../../repositories/user.repository'); // Ajusta la ruta según sea necesario
-
+const UserRepository = require('../../repositories/user.repository'); // Ajusta la ruta según sea necesario
 const userService = new UserRepository();
 
 router.post("/register", async (req, res) => {
-  try {
-    const { first_name, last_name, email, password } = req.body;
+    try {
+        const { first_name, last_name, email, password } = req.body;
 
-    // Validar si vienen los datos
-    if (!email || !password || !first_name || !last_name)
-      return res
-        .status(401)
-        .send({ status: "error", error: "Ingrese todos los datos necesarios" });
+        // Validar si vienen los datos
+        if (!email || !password || !first_name || !last_name)
+            return res
+                .status(401)
+                .send({ status: "error", error: "Ingrese todos los datos necesarios" });
 
-    // Validar si existe el usuario
-    const userExist = await userService.getUserBy({ email });
-    if (userExist)
-      return res
-        .status(401)
-        .send({ status: "error", error: "El usuario ya existe" });
+        // Validar si existe el usuario
+        const userExist = await userService.getUserBy({ email });
+        if (userExist)
+            return res
+                .status(401)
+                .send({ status: "error", error: "El usuario ya existe" });
 
-    const newUser = {
-      first_name,
-      last_name,
-      email,
-      password: createHash(password),
-    };
+        const newUser = {
+            first_name,
+            last_name,
+            email,
+            password: createHash(password),
+        };
 
-    const result = await userService.createUser(newUser);
+        const result = await userService.createUser(newUser);
 
-    // Datos que se guardan dentro del Token
-    const token = generateToken({
-      id: result._id,
-      email: result.email
-    });
+        // Datos que se guardan dentro del Token
+        const token = generateToken({
+            id: result._id,
+            email: result.email
+        });
 
-    res.send({ status: 'success', token });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ status: 'error', error: 'Error en el registro' });
-  }
+        res.send({ status: 'success', token });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ status: 'error', error: 'Error en el registro' });
+    }
 });
-
 
 router.post("/login", async (req, res) => {
   try {
@@ -74,7 +67,9 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    if (!isValidPassword(password, { password: userFound.password })) {
+    console.log('Hash de la contraseña almacenado:', userFound.password);
+
+    if (!isValidPassword(password, userFound.password)) {
       return res.status(401).send({
         status: "error",
         error: "Contraseña incorrecta"
@@ -100,14 +95,24 @@ router.post("/login", async (req, res) => {
     });
 
     res.cookie('coderCookieToken', token, {
-      maxAge: 60 * 60 * 1000 * 24,
-      httpOnly: true,
-      secure: false // Cambiar a true en producción con HTTPS
+      maxAge: 60 * 60 * 1000 * 24, // 1 día en milisegundos
+      httpOnly: false, 
+      sameSite: 'Lax'
     });
 
-    console.log("Token generado:", token);
+    // Guardar el token en la sesión
+    req.session.token = token;
 
-    res.redirect('/');
+    // Forzar a guardar la sesión antes de redirigir
+    req.session.save((err) => {
+      if (err) {
+        console.error("Error guardando la sesión:", err);
+        return res.status(500).send({ status: "error", error: "Error guardando la sesión" });
+      }
+      
+      // Redirigir solo después de que la sesión se haya guardado correctamente
+      res.redirect('/');
+    });
 
   } catch (error) {
     console.error("Error en el proceso de login:", error);
@@ -116,31 +121,30 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  req.session.destroy((error) => {
-    if (error) {
-      console.error('Error al destruir la sesión:', error);
-      return res.status(500).send({ status: "error", error: "Error al cerrar sesión" });
-    }
-    res.clearCookie('coderCookieToken'); // Borra la cookie del token
-    res.redirect('/login');
-  });
+    req.session.destroy((error) => {
+        if (error) {
+            console.error('Error al destruir la sesión:', error);
+            return res.status(500).send({ status: "error", error: "Error al cerrar sesión" });
+        }
+        res.clearCookie('coderCookieToken'); // Borra la cookie del token
+        res.redirect('/login');
+    });
 });
 
-router.get('/github', passport.authenticate('github', {scope: 'user:email'}, async (req, resp) => {}))
+router.get('/github', passport.authenticate('github', { scope: 'user:email' }));
 
 router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
-  if (!req.user) {
-      return res.redirect('/login'); // o maneja el error de alguna otra manera
-  }
+    if (!req.user) {
+        return res.redirect('/login'); // o maneja el error de alguna otra manera
+    }
 
-  if (!req.user.email) {
-      // Redirigir a la página donde el usuario puede proporcionar su correo electrónico
-      req.session.tempUser = req.user; // Guarda la información temporalmente
-      return res.redirect('/complete-profile');
-  }
-  req.session.user = req.user;
-  res.redirect('/');
+    if (!req.user.email) {
+        // Redirigir a la página donde el usuario puede proporcionar su correo electrónico
+        req.session.tempUser = req.user; // Guarda la información temporalmente
+        return res.redirect('/complete-profile');
+    }
+    req.session.user = req.user;
+    res.redirect('/');
 });
-
 
 module.exports = router;

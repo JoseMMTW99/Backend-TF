@@ -1,22 +1,22 @@
-const userSchema = new mongoose.Schema({
-    first_name: String,
-    last_name: String,
-    email: String,
-    password: String,
-    role: String,
-    cart: {
-        products: [
-            {
-                productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-                quantity: Number,
-                price: Number,
-                title: String,
-                description: String,
-                category: String,
-                stock: Number
-            }
-        ]
-    }
+const mongoose = require('mongoose');
+
+// Definir el esquema para el carrito
+const cartSchema = new mongoose.Schema({
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    products: [
+        {
+            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+            quantity: { type: Number, default: 1 },
+            price: Number,
+            title: String,
+            description: String,
+            category: String,
+            stock: Number
+        }
+    ]
 });
 
-const User = mongoose.model('User', userSchema);
+// Crear el modelo para el carrito
+const Cart = mongoose.model('Cart', cartSchema);
+
+module.exports = Cart;

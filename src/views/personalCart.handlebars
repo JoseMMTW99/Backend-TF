@@ -8,6 +8,10 @@
                         <h4 class="mb-0">Carrito de: {{cart.user.first_name}} {{cart.user.last_name}}</h4>
                     </div>
                     <div class="card-body">
+                        <!-- Almacenar el ID del usuario y el token de autenticación -->
+                        <span id="userId" data-user-id="{{cart.user._id}}" style="display: none;"></span>
+                        <input type="hidden" id="authToken" value="{{token}}" /> <!-- Token oculto -->
+
                         {{#if cart.products.length}}
                             <div class="row">
                                 {{#each cart.products}}
@@ -17,6 +21,10 @@
                                                 <h5 class="card-title">{{title}}</h5>
                                                 <p class="card-text"><strong>Precio:</strong> ${{price}}</p>
                                                 <p class="card-text"><strong>Cantidad:</strong> {{quantity}}</p>
+                                                <!-- Mostrar el productId -->
+                                                <p class="card-text"><strong>ID del Producto:</strong> {{productId}}</p>
+                                                <!-- Botón para eliminar producto -->
+                                                <button class="btn btn-danger" data-product-id="{{productId}}">Eliminar del carrito</button>
                                             </div>
                                         </div>
                                     </div>
@@ -27,6 +35,8 @@
                                 Carrito vacío
                             </div>
                         {{/if}}
+                        <!-- Botón para eliminar todo el carrito -->
+                        <button class="btn btn-danger mt-4" onclick="clearCart()">Eliminar todo el carrito</button>
                     </div>
                 </div>
             </div>
@@ -58,3 +68,6 @@
         No hay carrito para el usuario.
     </div>
 {{/if}}
+
+<!-- Script para manejar las acciones del carrito -->
+<script src="/js/personalCart.js"></script>

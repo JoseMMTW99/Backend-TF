@@ -51,9 +51,10 @@ app.use(session({
         mongoUrl: process.env.MONGO_URL,
         ttl: 60 * 60 * 1000 * 24 // 1 día en milisegundos
     }),
-    secret: 's3cr3tC0der',
-    resave: true,
-    saveUninitialized: true
+    secret: process.env.SESSION_SECRET || 's3cr3tC0der',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Cambiado a false para desarrollo local
 }));
 
 initializatePassport();

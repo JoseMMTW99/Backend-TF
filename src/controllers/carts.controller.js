@@ -11,9 +11,6 @@ class CartController {
         try {
             const carts = await this.cartService.getAllCarts({ limit, numPage });
     
-            // Verifica el formato de los datos
-            console.log('Carts data:', carts);
-    
             // Extrae datos de paginación
             const { page, hasPrevPage, hasNextPage, prevPage, nextPage } = carts;
     
@@ -24,9 +21,7 @@ class CartController {
                     user: cart.user,
                     products: cart.products.map(product => new CartDto(product))
                 }));
-    
-            console.log('Filtered Cart DTOs:', cartDtos); // Verifica los datos convertidos
-    
+
             res.render('carts', {
                 styles: "carts.css",
                 carts: cartDtos,
@@ -53,6 +48,6 @@ class CartController {
             res.status(500).json({ status: 'error', error: 'Error adding product to cart' });
         }
     }
-}
+}    
 
 module.exports = CartController;
