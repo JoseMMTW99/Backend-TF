@@ -1,18 +1,22 @@
 <main>
   <!-- Cabecera de usuario -->
   <div class="d-flex justify-content-end align-items-center py-2 px-3">
-  {{#if username}}
-    <a href="/profile/{{userId}}" class="btn btn-dark ms-3 fw-bold">
-  {{nombre}} {{apellido}}
-  {{#if role}}<small>(Admin)</small>{{/if}}
-</a>
-    <a href="/cart" class="btn btn-dark ms-2">Cart</a>
-    <a href="/api/sessions/logout" class="btn btn-outline-danger ms-2">Logout</a>
-  {{else}}
-    <a href="/login" class="btn btn-outline-primary ms-2">Login</a>
-    <a href="/register" class="btn btn-outline-dark ms-2">Register</a>
-  {{/if}}
-</div>
+    {{#if username}}
+      <a href="/profile/{{userId}}" class="btn btn-dark ms-3 fw-bold">
+        {{nombre}}
+        {{apellido}}
+        {{#if role}}<small>(Admin)</small>{{/if}}
+      </a>
+      <a href="/cart" class="btn btn-dark ms-2">Cart</a>
+      <a
+        href="/api/sessions/logout"
+        class="btn btn-outline-danger ms-2"
+      >Logout</a>
+    {{else}}
+      <a href="/login" class="btn btn-outline-primary ms-2">Login</a>
+      <a href="/register" class="btn btn-outline-dark ms-2">Register</a>
+    {{/if}}
+  </div>
 
   <!-- Título principal -->
   <div class="text-center mt-4">
@@ -83,15 +87,14 @@
     </ul>
   </nav>
 
-<!-- Footer -->
-<footer class="bg-dark text-white text-center py-4 mt-5">
-  <div class="container">
-    <h5 class="mb-3">USUARIO PARA HACER PRUEBAS:</h5>
-    <p class="lead mb-1"><strong>Usuario:</strong> admin@gmail.com</p>
-    <p class="lead"><strong>Contraseña:</strong> admin</p>
-  </div>
-</footer>
-
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+      <h5 class="mb-3">USUARIO PARA HACER PRUEBAS:</h5>
+      <p class="lead mb-1"><strong>Usuario:</strong> admin@gmail.com</p>
+      <p class="lead"><strong>Contraseña:</strong> admin</p>
+    </div>
+  </footer>
 
   <script>
     window.userId = "{{userId}}";

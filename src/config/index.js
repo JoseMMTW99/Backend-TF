@@ -17,7 +17,9 @@ const objectConfig = {
     gmail_pass: process.env.GMAIL_PASS,
     twilio_sid: process.env.TWILIO_ACCOUNT_SID,
     twilio_token: process.env.TWILIO_AUTH_TOKEN,
-    twilio_phone: process.env.TWILIO_PHONE
+    twilio_phone: process.env.TWILIO_PHONE,
+    stripe_key: process.env.STRIPE_KEY,
+    stripe_secret_key: process.env.STRIPE_SECRET_KEY
 }
 
 const connectDB = async () => {
