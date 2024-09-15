@@ -48,6 +48,10 @@ handlebars.registerHelper('json', function(context) {
   return JSON.stringify(context);
 });
 
+// Documantación
+router.get('/documentacion', (req, res) => {
+    res.render('documentacion', {styles: "introduccion.css"})
+})
 
 // Chat
 router.get('/chat', (req, res) => {
@@ -66,6 +70,11 @@ router.get('/login', (req, res) => {
 router.get('/register', (req, res) => {
     res.render('register', {styles: "register.css"})
 })
+
+// http:localhost:8080/createProducts
+router.get('/createProduct', (req, res) => {
+    res.render('createProduct');
+});
 
 // Pruebas
 router.get('/pruebas', (req, res) => {

@@ -27,9 +27,6 @@ router.get('/compleja', (req, res) => {
     })
 })
 
-
-// CLASE 30
-
 router.get('/mail', async (req,res) => {
     try {
         const user = {
@@ -62,8 +59,6 @@ router.get('/sms', async (req,res) => {
     }
 })
 
-// CLASE 32
-
 router.use(compression({
     brotli: {
         enabled:true,
@@ -77,8 +72,6 @@ router.get('/stringmuylargo', (req, res) => {
     }
     res.status(200).send(string)
 })
-
-// CLASE 34
 
 router.get('/loggertest', (req, res) => {
     req.logger.warning('Alerta!!')

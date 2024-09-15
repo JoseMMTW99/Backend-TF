@@ -1,0 +1,62 @@
+<main class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="mb-4 text-center">Agregar Producto</h1>
+            <form class="p-3 border rounded-3" id="productForm" action="/api/products" method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Ingresa el título del producto" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Ingresa una descripción del producto" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Precio</label>
+                    <input type="number" class="form-control" id="price" name="price" placeholder="Ingresa el precio del producto" required>
+                </div>
+                <div class="mb-3">
+                    <label for="category" class="form-label">Categoría</label>
+                    <input type="text" class="form-control" id="category" name="category" placeholder="Ingresa la categoría del producto" required>
+                </div>
+                <div class="mb-3">
+                    <label for="stock" class="form-label">Stock</label>
+                    <input type="number" class="form-control" id="stock" name="stock" placeholder="Ingresa el stock disponible" required>
+                </div>
+                <button type="submit" class="btn btn-dark w-100">Agregar Producto</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.querySelector('#productForm').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+
+        const formData = new FormData(event.target); // Captura los datos del formulario
+
+        // Convierte FormData a un objeto JSON
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('/api/products', { // Envía los datos a la ruta /api/products
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' // Establece el encabezado para JSON
+                },
+                body: JSON.stringify(data) // Convierte el objeto JSON a una cadena JSON
+            });
+
+            if (response.ok) {
+                alert('Producto agregado exitosamente'); // Mensaje de éxito
+                event.target.reset(); // Limpia el formulario
+            } else {
+                const error = await response.json();
+                alert(`Error al agregar el producto: ${error.error}`); // Mensaje de error con detalles
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error en la solicitud');
+        }
+    });
+</script>

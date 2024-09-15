@@ -47,3 +47,6 @@ error: Error: Parse error on line 59:
 ...e="{{cart.totalCost * 100}}" <!-- Convie
 -----------------------^
 Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'INVALID' en GET /cart
+error: Error: Failed to lookup view "introduccion" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /documentacion
+error: Error: Failed to lookup view "introduccion" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /documentacion
+error: Error: Failed to lookup view "introduccion" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /documentacion

@@ -16,20 +16,20 @@
             <ul class="pagination justify-content-center">
                 {{#if hasPrevPage}}
                     <li class="page-item">
-                        <a class="page-link" href="/api/products?numPage={{prevPage}}" aria-label="Anterior">
+                        <a class="page-link text-black" href="/api/products?numPage={{prevPage}}" aria-label="Anterior">
                             <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Anterior</span>
+                            <span class="sr-only"></span>
                         </a>
                     </li>
                 {{/if}}
                 <li class="page-item disabled">
-                    <span class="page-link">{{page}}</span>
+                    <span class="page-link text-black">{{page}}</span>
                 </li>
                 {{#if hasNextPage}}
                     <li class="page-item">
-                        <a class="page-link" href="/api/products?numPage={{nextPage}}" aria-label="Siguiente">
+                        <a class="page-link text-black" href="/api/products?numPage={{nextPage}}" aria-label="Siguiente">
                             <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Siguiente</span>
+                            <span class="sr-only"></span>
                         </a>
                     </li>
                 {{/if}}

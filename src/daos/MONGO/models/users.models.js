@@ -63,10 +63,7 @@ const UserSchema = new Schema({
         default: 'user'
     },
     cart: {
-        type: {
-            products: [productSchema] // Usa el esquema del producto para el carrito
-        },
-        default: { products: [] } // Valor por defecto para el carrito
+        products: [productSchema] // Define `products` directamente como un array de `productSchema`
     }
 });
 

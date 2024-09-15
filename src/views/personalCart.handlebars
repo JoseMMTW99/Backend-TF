@@ -17,14 +17,14 @@
               <div class="row">
                 {{#each cart.products}}
                   <div class="col-md-6 mb-4">
-                    <div class="card border-light">
+                    <div class="card border-light shadow-sm">
                       <div class="card-body">
                         <h5 class="card-title">{{title}}</h5>
                         <p class="card-text"><strong>Precio:</strong> ${{price}}</p>
                         <p class="card-text"><strong>Cantidad:</strong> {{quantity}}</p>
                         <!-- Alineación del botón a la derecha -->
                         <div class="text-end">
-                          <button class="btn btn-danger" data-product-id="{{productId}}">Eliminar del carrito</button>
+                          <button class="btn btn-danger" data-product-id="{{productId}}">Eliminar Producto</button>
                         </div>
                       </div>
                     </div>
@@ -32,8 +32,8 @@
                 {{/each}}
               </div>
 
-              <div class="text-end mt-4">
-                <button class="btn btn-danger" onclick="clearCart()">Eliminar todo el carrito</button>
+              <div class="text-end pe-3">
+                <button class="btn btn-danger" onclick="clearCart()">Eliminar Carrito</button>
               </div>
 
               <!-- Sección de pago -->
@@ -58,7 +58,7 @@
                       </div>
                     </div>
                     <div class="text-end">
-                      <button type="submit" class="btn btn-primary">Pagar</button>
+                      <button type="submit" class="btn btn-success">Finalizar Compra</button>
                     </div>
                   </form>
                 </div>
@@ -82,13 +82,16 @@
           <div class="card-body">
             <p><strong>Email:</strong> {{cart.user.email}}</p>
             <p><strong>Username:</strong> {{cart.user.username}}</p>
-            <div class="mt-4">
-              <h5>Resumen del Carrito</h5>
-              <hr />
-              <p><strong>Total Productos:</strong> {{cart.totalQuantity}}</p>
-              <p><strong>Costo Total:</strong> ${{cart.totalCost}}</p>
-              <input type="hidden" id="cart-total-cost" value="{{cart.totalCost}}" />
-            </div>
+          </div>
+        </div>
+        <div class="card mt-4 shadow-sm">
+          <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Resumen del Carrito</h4>
+          </div>
+          <div class="card-body">
+            <p><strong>Total de Productos:</strong> {{cart.totalQuantity}}</p>
+            <p><strong>Costo Total:</strong> ${{cart.totalCost}}</p>
+            <input type="hidden" id="cart-total-cost" value="{{cart.totalCost}}" />
           </div>
         </div>
       </div>
