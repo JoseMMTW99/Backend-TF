@@ -4,7 +4,8 @@ function auth(req, res, next) {
         return next();
     } else {
         console.log('Rol del usuario:', req.session?.user?.admin ? 'Admin' : 'No Admin');
-        return res.status(401).send('Error de autorización');
+        // Redirige a la ruta /auth si el usuario no tiene permisos
+        return res.redirect('/auth');
     }
 }
 

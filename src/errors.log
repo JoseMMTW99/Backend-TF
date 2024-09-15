@@ -50,3 +50,6 @@ Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SE
 error: Error: Failed to lookup view "introduccion" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /documentacion
 error: Error: Failed to lookup view "introduccion" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /documentacion
 error: Error: Failed to lookup view "introduccion" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /documentacion
+error: Error: Failed to lookup view "error" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /api/users
+error: Error: Failed to lookup view "error" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /api/users
+error: Error: Failed to lookup view "error" in views directory "/Users/josemmtw99/Programación/Visual Studio Code/Coderhouse/Backend_TF/src/views" en GET /api/users

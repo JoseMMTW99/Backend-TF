@@ -53,6 +53,11 @@ router.get('/documentacion', (req, res) => {
     res.render('documentacion', {styles: "introduccion.css"})
 })
 
+// Auth
+router.get('/auth', (req, res) => {
+    res.render('auth', {styles: "auth.css"})
+})
+
 // Chat
 router.get('/chat', (req, res) => {
     res.render('chat', {styles: "chat.css"})
