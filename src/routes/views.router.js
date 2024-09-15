@@ -65,6 +65,7 @@ router.get('/profile/:uid', async (req, res) => {
         // Renderiza la vista 'profile' con los datos del usuario
         res.render('profile', {
             styles: "profile.css",
+            userId: user._id,
             username: user.username,
             nombre: user.first_name,
             apellido: user.last_name,
@@ -76,6 +77,34 @@ router.get('/profile/:uid', async (req, res) => {
         res.status(500).send('Error interno del servidor');
     }
 });
+
+// Ruta para editar perfil
+router.get('/editProfile/:uid', async (req, res) => {
+    try {
+        const userId = req.params.uid;
+        const response = await userController.getUser(req, res); // Llama al método getUser del controlador
+
+        if (response.status === 'error') {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        const user = response.payload;
+
+        // Renderiza la vista 'editProfile' con los datos del usuario
+        res.render('editProfile', {
+            styles: "editProfile.css",
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            // Enviar el ID del usuario para usar en el formulario (si es necesario)
+            userId: user._id 
+        });
+    } catch (error) {
+        console.error('Error al obtener los datos del usuario para editar perfil:', error);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
 
 // Auth
 router.get('/auth', (req, res) => {

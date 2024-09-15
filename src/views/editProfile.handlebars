@@ -1,0 +1,88 @@
+<main class="container">
+    <!-- Botón de Volver al Inicio alineado a la derecha -->
+    <div class="d-flex justify-content-end align-items-center pt-2 pb-5">
+        <a href="/" class="btn btn-dark">Volver al Inicio</a>
+    </div>
+
+    <!-- Formulario de edición de perfil centrado -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="mb-4 text-center">Editar Perfil</h1>
+            <form id="editProfileForm" action="/api/users/{{userId}}" class="p-3 border rounded-3">
+                <!-- Método de sobreescritura para PUT (esto no se necesita en este caso porque usamos Fetch API) -->
+                <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" id="userId" value="{{userId}}"> <!-- Campo oculto para almacenar el ID del usuario -->
+                <div class="mb-3">
+                    <label for="first_name" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Ingresa tu nombre" value="{{first_name}}" required>
+                    <div id="first_name_error" class="text-danger"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="last_name" class="form-label">Apellido</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Ingresa tu apellido" value="{{last_name}}" required>
+                    <div id="last_name_error" class="text-danger"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu email" value="{{email}}" required>
+                    <div id="email_error" class="text-danger"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Nueva Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa una nueva contraseña">
+                    <div id="password_error" class="text-danger"></div>
+                </div>
+                <button type="submit" class="btn btn-dark w-100">Actualizar Perfil</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.getElementById('editProfileForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Previene el envío automático del formulario
+
+        // Obtiene los valores de los campos del formulario
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        // Obtiene el ID del usuario del campo oculto
+        const userId = document.getElementById('userId').value;
+
+        // Realiza la solicitud PUT usando Fetch API
+        fetch(form.action, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.status === 'success') {
+                // Redirige a la página de perfil del usuario si la actualización fue exitosa
+                window.location.href = `/profile/${userId}`;
+            } else {
+                // Muestra los errores en la página
+                displayErrors(result.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displayErrors('Hubo un problema al conectar con el servidor. Por favor, intenta nuevamente.');
+        });
+    });
+
+    function displayErrors(errorMessage) {
+        // Muestra los errores en la página
+        alert(errorMessage);
+        // También puedes optar por mostrar los errores en elementos específicos del formulario
+        // Ejemplo:
+        // document.getElementById('first_name_error').textContent = errorMessage;
+        // Puedes añadir lógica para mostrar errores en campos específicos si lo deseas
+    }
+</script>

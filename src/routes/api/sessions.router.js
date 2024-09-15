@@ -127,7 +127,7 @@ router.get("/logout", (req, res) => {
             return res.status(500).send({ status: "error", error: "Error al cerrar sesión" });
         }
         res.clearCookie('coderCookieToken'); // Borra la cookie del token
-        res.redirect('/login');
+        res.redirect('/');
     });
 });
 

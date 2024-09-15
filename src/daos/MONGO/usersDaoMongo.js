@@ -54,7 +54,7 @@ class UsersDaoMongo {
             console.error('Error al actualizar usuario:', error);
             throw error;
         }
-    }
+    }    
 
     // Eliminar un usuario por ID
     remove = async (uid) => {

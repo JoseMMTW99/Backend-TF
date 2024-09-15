@@ -3,6 +3,8 @@ const { userService } = require("../service");
 const { generateUserError } = require("../service/error/info");
 const { EError } = require("../service/error/enums");
 const { CustomError } = require("../service/error/CustomError");
+const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 
 class UsersController {
     constructor() {
@@ -81,29 +83,46 @@ class UsersController {
             next(error);
         }
     }
-    
 
-    updateUser = async (req, res) => {
-        const { uid } = req.params;
-        const { first_name, last_name, email } = req.body;
-        if (!first_name || !last_name || !email) return res.send({ status: 'error', error: 'Faltan Campos' });
+updateUser = async (req, res) => {
+    const { uid } = req.params;
+    const { first_name, last_name, email, password } = req.body;
 
-        const updatedFields = {};
-        if (first_name) updatedFields.first_name = first_name;
-        if (last_name) updatedFields.last_name = last_name;
-        if (email) updatedFields.email = email;
-
-        try {
-            const result = await this.userService.updateUser(uid, updatedFields);
-            if (result.nModified === 0) {
-                return res.status(404).send({ status: 'error', error: 'Usuario no encontrado' });
-            }
-            res.send({ status: 'success', payload: result });
-        } catch (error) {
-            console.error('Error updating user:', error);
-            res.status(500).send({ status: 'error', error: 'Error updating user' });
-        }
+    // Verifica si los campos obligatorios están presentes
+    if (!first_name || !last_name || !email) {
+        return res.status(400).send({ status: 'error', error: 'Faltan Campos' });
     }
+
+    // Prepara los campos actualizados
+    const updatedFields = {};
+    if (first_name) updatedFields.first_name = first_name;
+    if (last_name) updatedFields.last_name = last_name;
+    if (email) updatedFields.email = email;
+    if (password) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        updatedFields.password = hashedPassword;
+    }
+
+    // Verifica si el ID es válido
+    if (!mongoose.Types.ObjectId.isValid(uid)) {
+        return res.status(400).send({ status: 'error', error: 'ID de usuario inválido' });
+    }
+
+    try {
+        // Llama al servicio para actualizar el usuario
+        const result = await this.userService.updateUser(uid, updatedFields);
+
+        if (!result) {
+            return res.status(404).send({ status: 'error', error: 'Usuario no encontrado' });
+        }
+
+        res.send({ status: 'success', payload: result });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).send({ status: 'error', error: 'Error updating user' });
+    }
+}
+ 
 
     deleteUser = async (req, res) => {
         const { uid } = req.params;

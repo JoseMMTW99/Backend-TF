@@ -19,6 +19,7 @@ const handleErrors = require('./middlewares/errors');
 const { addLogger } = require('./utils/logger');
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUiExpress = require('swagger-ui-express')
+const methodOverride = require('method-override');
 
 const app = express();
 const { port } = objectConfig;
@@ -39,6 +40,7 @@ app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 app.use(express.static('public'));
 app.use('/static', express.static(__dirname + '/public'));
 app.use(cookieParser('s3cr3t0F1rma'));
