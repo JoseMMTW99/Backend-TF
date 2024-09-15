@@ -39,8 +39,7 @@ const productSchema = new Schema({
 // Esquema de usuario
 const UserSchema = new Schema({
     username: {
-        type: String,
-        required: true
+        type: String
     },
     first_name: {
         type: String,

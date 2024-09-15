@@ -23,8 +23,7 @@ class UserRepository {
     }
 
     async createUser(user) {
-        const newUser = new UserDto(user);
-        return await this.userManager.create(newUser);
+        return await this.userManager.create(user);
     }
 
     async updateUser(uid, userToUpdate) {
