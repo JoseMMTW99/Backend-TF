@@ -7,13 +7,11 @@ const { getUsers, getUser, createUser, updateUser, deleteUser } = new UserContro
 
 // ENDPOINTS USERS CRUD
 
-router.use(auth);
-
-router.get('/', getUsers)
+router.get('/', auth, getUsers)
 router.get('/:uid', getUser)
 router.post('/', createUser)
 router.put('/:uid', updateUser)
-router.delete('/:uid', deleteUser)
+router.delete('/:uid', auth, deleteUser)
  
 
 module.exports = router;

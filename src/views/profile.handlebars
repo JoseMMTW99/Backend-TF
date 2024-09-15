@@ -1,0 +1,57 @@
+<main class="container mt-5">
+    <div class="row justify-content-center">
+        <!-- Columna izquierda vacía (3 columnas en pantallas md+) -->
+        <div class="col-md-3 d-none d-md-block"></div>
+
+        <!-- Columna del perfil (6 columnas en pantallas md+) -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="card-title mb-4 text-center">Mi Perfil</h1>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Nombre/s</h5>
+                            <p class="mb-1">{{nombre}}</p>
+                        </div>
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Apellido/s</h5>
+                            <p class="mb-1">{{apellido}}</p>
+                        </div>
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Email</h5>
+                            <p class="mb-1">{{email}}</p>
+                        </div>
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Contraseña</h5>
+                            <p class="mb-1">********</p>
+                        </div>
+                    </div>
+                    <!-- Botones debajo del perfil -->
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="/editProfile" class="btn btn-dark">Editar Usuario</a>
+                        <a href="/" class="btn btn-dark">Volver al Inicio</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna derecha del panel admin (3 columnas en pantallas md+) -->
+        {{#if isAdmin}}
+        <div class="col-md-3 d-none d-md-block">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 text-center">Panel Admin</h5>
+                    <div class="d-grid gap-2">
+                        <a href="/api/products" class="btn btn-dark">Productos</a>
+                        <a href="/api/users" class="btn btn-dark">Usuarios</a>
+                        <a href="/api/carts" class="btn btn-dark">Carritos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <!-- Columna derecha vacía (3 columnas en pantallas md+) cuando no es admin -->
+        <div class="col-md-3 d-none d-md-block"></div>
+        {{/if}}
+    </div>
+</main>

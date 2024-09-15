@@ -49,6 +49,34 @@ handlebars.registerHelper('json', function(context) {
   return JSON.stringify(context);
 });
 
+// Ruta para perfil de usuario
+router.get('/profile/:uid', async (req, res) => {
+    try {
+        const userId = req.params.uid;
+        const response = await userController.getUser(req, res); // Llama al método getUser del controlador
+
+        if (response.status === 'error') {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        const user = response.payload;
+        const isAdmin = user.role === 'admin';
+
+        // Renderiza la vista 'profile' con los datos del usuario
+        res.render('profile', {
+            styles: "profile.css",
+            username: user.username,
+            nombre: user.first_name,
+            apellido: user.last_name,
+            email: user.email,
+            isAdmin
+        });
+    } catch (error) {
+        console.error('Error al obtener el perfil del usuario:', error);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
 // Auth
 router.get('/auth', (req, res) => {
     res.render('auth', {styles: "auth.css"})

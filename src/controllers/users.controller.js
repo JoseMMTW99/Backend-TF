@@ -37,14 +37,14 @@ class UsersController {
     getUser = async (req, res) => {
         const { uid } = req.params;
         try {
-            const userFound = await this.userService.getUserById(uid); // Llama a getUserById
+            const userFound = await this.userService.getUserById(uid);
             if (!userFound) {
-                return res.status(404).send({ status: 'error', error: 'Usuario no encontrado' });
+                return { status: 'error', error: 'Usuario no encontrado' }; // Cambia esto a un objeto
             }
-            res.send({ status: 'success', payload: userFound });
+            return { status: 'success', payload: userFound }; // Cambia esto a un objeto
         } catch (error) {
             console.error('Error fetching user:', error);
-            res.status(500).send({ status: 'error', error: 'Error fetching user' });
+            return { status: 'error', error: 'Error fetching user' }; // Cambia esto a un objeto
         }
     }
 
