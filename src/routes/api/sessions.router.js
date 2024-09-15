@@ -9,47 +9,42 @@ const UserRepository = require('../../repositories/user.repository'); // Ajusta 
 const userService = new UserRepository();
 
 router.post("/register", async (req, res) => {
-    try {
-        const { first_name, last_name, email, password } = req.body;
+  try {
+      const { first_name, last_name, email, password } = req.body;
 
-        // Validar si vienen los datos
-        if (!email || !password || !first_name || !last_name)
-            return res
-                .status(401)
-                .send({ status: "error", error: "Ingrese todos los datos necesarios" });
+      // Validar si vienen los datos
+      if (!email || !password || !first_name || !last_name)
+          return res
+              .status(401)
+              .send({ status: "error", error: "Ingrese todos los datos necesarios" });
 
-        // Validar si existe el usuario
-        const userExist = await userService.getUserBy({ email });
-        if (userExist)
-            return res
-                .status(401)
-                .send({ status: "error", error: "El usuario ya existe" });
+      // Validar si existe el usuario
+      const userExist = await userService.getUserBy({ email });
+      if (userExist)
+          return res
+              .status(401)
+              .send({ status: "error", error: "El usuario ya existe" });
 
-        // Hash de la contraseña
-        const hashedPassword = createHash(password);
-        console.log(hashedPassword)
+      // Hash de la contraseña
+      const hashedPassword = createHash(password);
+      console.log(hashedPassword);
 
-        const newUser = {
-            username: `${first_name} ${last_name}`,
-            first_name,
-            last_name,
-            email,
-            password: hashedPassword,
-        };
+      const newUser = {
+          username: `${first_name} ${last_name}`,
+          first_name,
+          last_name,
+          email,
+          password: hashedPassword,
+      };
 
-        const result = await userService.createUser(newUser);
+      const result = await userService.createUser(newUser);
 
-        // Datos que se guardan dentro del Token
-        const token = generateToken({
-            id: result._id,
-            email: result.email
-        });
-
-        res.send({ status: 'success', token });
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({ status: 'error', error: 'Error en el registro' });
-    }
+      // Redirigir a la página de login si se crea el usuario correctamente
+      res.redirect('/login');
+  } catch (error) {
+      console.log(error);
+      res.status(500).send({ status: 'error', error: 'Error en el registro' });
+  }
 });
 
 router.post("/login", async (req, res) => {

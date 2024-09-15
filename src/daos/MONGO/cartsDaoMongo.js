@@ -62,34 +62,37 @@ class CartsDaoMongo {
       if (!user) {
         throw new Error("Usuario no encontrado");
       }
-
+  
       const product = await this.productDao.getById(productId);
       if (!product) {
         throw new Error("Producto no encontrado");
       }
-
+  
       const productDto = new ProductDto(product);
-
+  
       if (!user.cart) {
         user.cart = {
           products: [],
         };
       }
-
+  
       if (!Array.isArray(user.cart.products)) {
         user.cart.products = [];
       }
-
+  
+      // Busca si el producto ya está en el carrito
       const productIndex = user.cart.products.findIndex(
-        (p) => p.productId.toString() === productId
+        (p) => p.productId.toString() === productId.toString() // Comparar como cadenas
       );
+  
       if (productIndex !== -1) {
+        // Producto ya existe en el carrito, sumar la cantidad
         user.cart.products[productIndex].quantity += quantity;
-        user.cart.products[productIndex].price = productDto.price;
       } else {
+        // Producto no está en el carrito, agregarlo como nuevo
         user.cart.products.push({
-          productId,
-          quantity,
+          productId: productDto.productId, // Asegurarse de usar el ID correcto
+          quantity: quantity,
           price: productDto.price,
           title: productDto.title,
           description: productDto.description,
@@ -97,11 +100,13 @@ class CartsDaoMongo {
           stock: productDto.stock,
         });
       }
-
-      // Actualiza el carrito del usuario
-      user.markModified("cart"); // Marca 'cart' como modificado
-
+  
+      // Marca 'cart' como modificado
+      user.markModified("cart");
+  
+      // Guarda los cambios
       await user.save();
+  
       return user.cart;
     } catch (error) {
       console.error("Error al agregar producto al carrito:", error);

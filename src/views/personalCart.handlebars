@@ -1,8 +1,11 @@
 {{#if cart}}
   <div class="container mt-4">
     <div class="row">
+      <div class="text-end mb-4">
+          <a href="/" class="btn btn-dark">Volver al Home</a>
+      </div>
       <!-- Columna izquierda: Productos -->
-      <div class="col-md-8">
+      <div class="col-md-8 pb-5">
         <div class="card mb-4 shadow-sm">
           <div class="card-header bg-dark text-white">
             <h4 class="mb-0">Carrito de: {{cart.user.first_name}} {{cart.user.last_name}}</h4>
@@ -74,7 +77,7 @@
       </div>
 
       <!-- Columna derecha: Datos del usuario y resumen del carrito -->
-      <div class="col-md-4">
+      <div class="col-md-4 pb-5">
         <div class="card mb-4 shadow-sm">
           <div class="card-header bg-dark text-white">
             <h4 class="mb-0">Resumen del Usuario</h4>

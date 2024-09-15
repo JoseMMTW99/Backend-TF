@@ -49,7 +49,6 @@ class PersonalCartController {
 
             const token = req.session.token;
             const tokenStripe = process.env.STRIPE_KEY
-            console.log(token)
     
             res.render('personalCart', {
                 styles: "carts.css",

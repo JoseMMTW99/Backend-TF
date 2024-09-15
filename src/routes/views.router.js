@@ -44,14 +44,10 @@ router.get('/', async (req, res) => {
 });
 
 const handlebars = require('handlebars');
+const { authToken } = require('../utils/jsonwebtoken');
 handlebars.registerHelper('json', function(context) {
   return JSON.stringify(context);
 });
-
-// Documantación
-router.get('/documentacion', (req, res) => {
-    res.render('documentacion', {styles: "introduccion.css"})
-})
 
 // Auth
 router.get('/auth', (req, res) => {
@@ -62,9 +58,6 @@ router.get('/auth', (req, res) => {
 router.get('/chat', (req, res) => {
     res.render('chat', {styles: "chat.css"})
 })
-
-// Paginación
-router.get('/users', auth, userController.getUsers);
 
 // Login
 router.get('/login', (req, res) => {
@@ -77,7 +70,7 @@ router.get('/register', (req, res) => {
 })
 
 // http:localhost:8080/createProducts
-router.get('/createProduct', (req, res) => {
+router.get('/createProduct', auth, (req, res) => {
     res.render('createProduct');
 });
 
