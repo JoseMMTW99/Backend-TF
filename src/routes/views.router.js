@@ -122,6 +122,11 @@ router.get('/login', (req, res) => {
 })
 
 // Register
+router.get('/registerAdmin', auth,(req, res) => {
+    res.render('registerAdmin', {styles: "register.css"})
+})
+
+// Register
 router.get('/register', (req, res) => {
     res.render('register', {styles: "register.css"})
 })

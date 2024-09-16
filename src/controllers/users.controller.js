@@ -52,10 +52,10 @@ class UsersController {
 
     createUser = async (req, res, next) => {    
         try {
-            const { first_name, last_name, email, password } = req.body;
+            const { first_name, last_name, email, password, role } = req.body; // Agrega el campo role aquí
             
             // Validación de campos
-            if (!first_name || !last_name || !email) {
+            if (!first_name || !last_name || !email || !role) {  // Asegúrate de que también se valide el campo role
                 const error = CustomError.createError({
                     name: 'Error al crear un usuario',
                     cause: generateUserError({ first_name, last_name, email }),
@@ -63,14 +63,15 @@ class UsersController {
                     code: EError.INVALID_TYPES_ERROR
                 });
                 return res.status(400).send({ status: 'error', error: error.message });
-            }  
+            }
     
             // Crear nuevo usuario
             const newUser = {
                 first_name,
                 last_name,
                 email,
-                password
+                password,
+                role // Asegúrate de incluir el role aquí
             };
     
             // Pasar al servicio para guardar en la base de datos
@@ -82,7 +83,7 @@ class UsersController {
             // Pasar el error al middleware de manejo de errores
             next(error);
         }
-    }
+    }    
 
 updateUser = async (req, res) => {
     const { uid } = req.params;

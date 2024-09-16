@@ -1,0 +1,32 @@
+<main class="container">
+    <!-- Botón de Volver al Inicio alineado a la derecha -->
+    <div class="d-flex justify-content-end align-items-center pt-2 pb-5">
+        <a href="/" class="btn btn-dark">Volver al Inicio</a>
+    </div>
+
+    <!-- Formulario de registro centrado -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="mb-4 text-center">Register Admin</h1>
+            <form action="/api/sessions/registerAdmin" method="POST" class="p-3 border rounded-3">
+                <div class="mb-3">
+                    <label for="first_name" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Ingresa tu nombre" required>
+                </div>
+                <div class="mb-3">
+                    <label for="last_name" class="form-label">Apellido</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Ingresa tu apellido" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+                </div>
+                <button type="submit" class="btn btn-dark w-100">Registrarse</button>
+            </form>
+        </div>
+    </div>
+</main>

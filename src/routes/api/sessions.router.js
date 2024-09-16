@@ -8,6 +8,52 @@ const router = Router();
 const UserRepository = require('../../repositories/user.repository'); // Ajusta la ruta según sea necesario
 const userService = new UserRepository();
 
+router.post("/registerAdmin", async (req, res, next) => {
+  try {    
+    const { first_name, last_name, email, password } = req.body;
+
+    // Validar si vienen los datos
+    if (!email || !password || !first_name || !last_name) {
+        console.log("Faltan datos en la solicitud");
+        return res
+            .status(401)
+            .send({ status: "error", error: "Ingrese todos los datos necesarios" });
+    }
+
+    // Validar si existe el usuario
+    const userExist = await userService.getUserBy({ email });
+    console.log("Usuario ya existe:", userExist);
+    if (userExist) {
+        console.log("Intento de registro de usuario existente");
+        return res
+            .status(401)
+            .send({ status: "error", error: "El usuario ya existe" });
+    }
+
+    // Hash de la contraseña
+    const hashedPassword = createHash(password);
+
+    // Crear el nuevo usuario con rol admin
+    const newUser = {
+        username: `${first_name} ${last_name}`,
+        first_name,
+        last_name,
+        email,
+        password: hashedPassword,
+        role: "admin" // Asegúrate de definir el rol aquí
+    };
+
+    // Pasar al servicio para guardar en la base de datos
+    const result = await userService.createUser(newUser);
+
+    // Redirigir a la página de login si se crea el usuario correctamente
+    res.redirect('/login');
+  } catch (error) {
+    console.log("Error en el registro:", error);
+    res.status(500).send({ status: 'error', error: 'Error en el registro' });
+  }
+});
+
 router.post("/register", async (req, res) => {
   try {
       const { first_name, last_name, email, password } = req.body;
@@ -35,6 +81,7 @@ router.post("/register", async (req, res) => {
           last_name,
           email,
           password: hashedPassword,
+          role: "user"
       };
 
       const result = await userService.createUser(newUser);

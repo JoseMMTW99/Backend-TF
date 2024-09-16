@@ -1,11 +1,13 @@
 <main class="container mt-5">
-    <div class="row justify-content-center">
+    <div class="row">
         <!-- Columna izquierda vacía (3 columnas en pantallas md+) -->
+        {{#if isAdmin}}
         <div class="col-md-3 d-none d-md-block"></div>
+        {{/if}}
 
         <!-- Columna del perfil (6 columnas en pantallas md+) -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
+        <div class="{{#if isAdmin}}col-md-6{{else}}col-12{{/if}} d-flex justify-content-center">
+            <div class="card shadow-sm w-100">
                 <div class="card-body">
                     <h1 class="card-title mb-4 text-center">Mi Perfil</h1>
                     <div class="list-group">
@@ -45,13 +47,28 @@
                         <a href="/api/products" class="btn btn-dark">Productos</a>
                         <a href="/api/users" class="btn btn-dark">Usuarios</a>
                         <a href="/api/carts" class="btn btn-dark">Carritos</a>
+                        <a href="/registerAdmin" class="btn btn-dark">Crear Admin</a>
                     </div>
                 </div>
             </div>
         </div>
-        {{else}}
-        <!-- Columna derecha vacía (3 columnas en pantallas md+) cuando no es admin -->
-        <div class="col-md-3 d-none d-md-block"></div>
+        {{/if}}
+
+        <!-- Columna derecha del panel admin (en pantallas menores a md) -->
+        {{#if isAdmin}}
+        <div class="col-12 d-md-none mt-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 text-center">Panel Admin</h5>
+                    <div class="d-grid gap-2">
+                        <a href="/api/products" class="btn btn-dark">Productos</a>
+                        <a href="/api/users" class="btn btn-dark">Usuarios</a>
+                        <a href="/api/carts" class="btn btn-dark">Carritos</a>
+                        <a href="/registerAdmin" class="btn btn-dark">Crear Admin</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         {{/if}}
     </div>
 </main>
