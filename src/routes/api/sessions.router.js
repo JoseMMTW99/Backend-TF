@@ -73,7 +73,6 @@ router.post("/register", async (req, res) => {
 
       // Hash de la contraseña
       const hashedPassword = createHash(password);
-      console.log(hashedPassword);
 
       const newUser = {
           username: `${first_name} ${last_name}`,
@@ -114,8 +113,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    console.log('Hash de la contraseña almacenado:', userFound.password);
-
     if (!isValidPassword(password, userFound.password)) {
       return res.status(401).send({
         status: "error",
@@ -132,8 +129,6 @@ router.post("/login", async (req, res) => {
       role: userFound.role,
       admin: userFound.role === "admin"
     };
-
-    console.log("Usuario autenticado:", req.session.user);
 
     const token = generateToken({
       id: userFound._id,
