@@ -1,15 +1,14 @@
+const path = require('path');
 const dotenv = require('dotenv');
 const { connect } = require('mongoose');
 const program = require('../utils/commander');
 const MongoSingleton = require('../utils/MongoSingleton');
 
 const { mode } = program.opts();
-dotenv.config({
-    path: mode === 'production' ? './.env.production' : './.env.development'
-  });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const objectConfig = {
-    port: process.env.PORT || 8080, // Si no usa process.env.PORT, usa el valor 8080
+    port: process.env.PORT || 8080,
     mongo_url: process.env.MONGO_URL,
     jwt_private_key: process.env.JWT_PRIVATE_KEY ,
     persistence: process.env.PERSISTENCE,
@@ -21,6 +20,9 @@ const objectConfig = {
     stripe_key: process.env.STRIPE_KEY,
     stripe_secret_key: process.env.STRIPE_SECRET_KEY
 }
+
+console.log('Stripe Key:', process.env.STRIPE_KEY);
+console.log('Stripe Secret Key:', process.env.STRIPE_SECRET_KEY);
 
 const connectDB = async () => {
     MongoSingleton.getInstance()
