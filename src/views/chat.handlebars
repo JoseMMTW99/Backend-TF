@@ -1,14 +1,39 @@
-<main>
-    <h1>Bienvenidos al Chat</h1>
-    <div>
-        <input type="text" name="chatBox" id="chatBox">
+<main class="container">
+    <!-- Botón de Volver al Inicio alineado a la derecha -->
+    <div class="d-flex justify-content-end align-items-center pt-2 pb-5">
+        <a href="/" class="btn btn-dark">Volver al Inicio</a>
     </div>
-    <div>
-        <ul id="messageLog"></ul>
+
+    <div class="row">
+        <!-- Columna izquierda vacía (3 columnas en pantallas md+) -->
+        <div class="col-md-3 d-none d-md-block"></div>
+
+        <!-- Columna del chat (6 columnas en pantallas md+) -->
+        <div class="col-md-6 col-12 d-flex justify-content-center pb-5">
+            <div class="card shadow-sm w-100">
+                <div class="card-body">
+                    <h1 class="card-title mb-4 text-center">Bienvenidos al Chat de Soporte</h1>
+                    
+                    <!-- Input para el chat -->
+                    <div class="input-group mb-3 px-5">
+                        <input type="text" class="form-control" placeholder="Escribe tu mensaje aquí..." id="chatBox">
+                        <button class="btn btn-dark" type="button" id="sendMessage">Enviar</button>
+                    </div>
+
+                    <!-- Log de mensajes -->
+                    <div class="chat-log pt-3 px-5">
+                        <ul class="list-group px-5" id="messageLog"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna derecha vacía (3 columnas en pantallas md+) -->
+        <div class="col-md-3 d-none d-md-block"></div>
     </div>
 </main>
 
-{{!-- Importo script de Nodemodule --}}
+<!-- Importo script de Nodemodule -->
 <script src="/sweetalert2/sweetalert2.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/chat.js"></script>

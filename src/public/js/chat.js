@@ -2,14 +2,6 @@ console.log('Bienvenidos al chat de WebSocket');
 
 const socket = io();
 
-// const Swal = require('sweetalert2')
-
-// Swal.fire({
-//     title:'Hola coders',
-//     text: 'Alerta básica con Sweet Alert 2',
-//     icon: 'success'
-// })
-
 let user
 let chatBox = document.getElementById('chatBox')
 
@@ -24,7 +16,6 @@ Swal.fire({
 })
 .then(result =>{
     user = result.value
-    console.log(user);
 })
 
 // Input del Chat
@@ -38,8 +29,6 @@ chatBox.addEventListener('keyup', evt => {
 )
 
 socket.on('messageLogs', data => {
-    // console.log('Mensajes del server: ', data);
-
     let log = document.getElementById('messageLog')
 
     let messages = '';
